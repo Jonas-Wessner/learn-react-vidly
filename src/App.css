@@ -36,3 +36,24 @@
     transform: rotate(360deg);
   }
 }
+
+*,
+*::after,
+*::before {
+  box-sizing: border-box; /* sizes of elements are calculated including the border size */
+}
+
+.counter {
+  display: flex;
+  align-items: center;
+}
+
+.counter > .btn,
+.counter > .badge {
+  min-height: 2rem;
+  padding: 1rem;
+  margin: 0 2rem;
+  display: flex;
+  /* position text vertically in the middle of the element */
+  align-items: center;
+}
