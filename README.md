@@ -1,6 +1,6 @@
-# Getting Started with Create React App
+# Vidly - Test Project to Learn react
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+**This Project is created while following the "Master React" course on codewithmosh.com Below are still the automatically by React created links and advice.**
 
 ## Available Scripts
 
