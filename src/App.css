@@ -57,3 +57,7 @@
   /* position text vertically in the middle of the element */
   align-items: center;
 }
+
+#navbar {
+  justify-content: flex-start;
+}
