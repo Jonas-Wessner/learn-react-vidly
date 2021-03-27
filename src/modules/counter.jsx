@@ -12,29 +12,40 @@ class Counter extends Component {
     // object destructuring,
     // this stores the attributes that we are interested in in separate variables.
     // this makes using those variables below shorter and cleaner
-    const { onIncrement, onDelete, counter } = this.props;
+    const { onIncrement, onDecrement, onDelete, counter } = this.props;
 
     return (
-      <div className="counter">
-        <span className={this.getBadgeClasses()}>{this.formatCount()}</span>
-        <button
-          onClick={() => onIncrement(counter)}
-          className="btn btn-primary"
-        >
-          ++
-        </button>
-        <button
-          onClick={() => onDelete(counter)}
-          className="btn btn-danger m-2"
-        >
-          Delete
-        </button>
+      <div className="row">
+        <span id="counterValue" className={this.getBadgeClasses()}>
+          {this.formatCount()}
+        </span>
+        <div className="col">
+          <button
+            onClick={() => onIncrement(counter)}
+            className="btn btn-primary"
+          >
+            +
+          </button>
+          <button
+            className="btn btn-secondary"
+            disabled={this.counter.value === 0 ? "disabled" : ""}
+            onClick={() => onDecrement(counter)}
+          >
+            -
+          </button>
+          <button
+            onClick={() => onDelete(counter)}
+            className="btn btn-danger m-2"
+          >
+            Delete
+          </button>
+        </div>
       </div>
     );
   }
 
   getBadgeClasses() {
-    let classes = "badge m-2 badge-";
+    let classes = "col badge m-2 badge-";
     return (classes += this.counter.value === 0 ? "warning" : "success");
   }
 
@@ -42,6 +53,11 @@ class Counter extends Component {
     const { value } = this.props.counter; // Object destructuring
     return value === 0 ? "zero" : value;
   }
+
+  getDecrementButtonClasses = () => {
+    let classes = "btn btn-";
+    return (classes += this.counter.value === 0 ? "light" : "secondary");
+  };
 }
 
 export default Counter;

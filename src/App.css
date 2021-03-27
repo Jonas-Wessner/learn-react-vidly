@@ -61,3 +61,10 @@
 #navbar {
   justify-content: flex-start;
 }
+
+#counterValue {
+  max-width: 3rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}

@@ -18,12 +18,20 @@ class App extends Component {
     });
   };
 
-  handleIncrement = counter => {
+  updateCounterValue = (counter, value) => {
     const c = [...this.state.counters]; // clone counters
     const index = c.indexOf(counter);
     c[index] = { ...counter }; // clone relevant counter, because is is so far still referencing the counter in the state
-    c[index].value += 1; // increment new value without modifying this.state
+    c[index].value = value; // increment new value without modifying this.state
     this.setState({ counters: c }); // let react properly update this.state
+  };
+
+  handleIncrement = counter => {
+    this.updateCounterValue(counter, counter.value + 1);
+  };
+
+  handleDecrement = counter => {
+    this.updateCounterValue(counter, counter.value - 1);
   };
 
   handleReset = () => {
@@ -45,6 +53,7 @@ class App extends Component {
             counters={this.state.counters}
             onReset={this.handleReset}
             onIncrement={this.handleIncrement}
+            onDecrement={this.handleDecrement}
             onDelete={this.handleDelete}
           />
         </main>
