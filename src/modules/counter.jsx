@@ -23,7 +23,7 @@ class Counter extends Component {
 
   getBadgeClasses() {
     let classes = "badge m-2 badge-";
-    return (classes += this.props.counter.value === 0 ? "danger" : "success");
+    return (classes += this.props.counter.value === 0 ? "warning" : "success");
   }
 
   formatCount() {
