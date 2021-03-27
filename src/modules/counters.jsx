@@ -11,7 +11,7 @@ class Counters extends Component {
       counters,
     } = this.props;
 
-    if (counters.length === 0) return <div />; // render nothing, e.g. do not render Reset-button
+    if (counters.length === 0) return null; // render nothing, e.g. do not render Reset-button
     return (
       <React.Fragment>
         <button className="btn btn-primary m-2" onClick={onReset}>

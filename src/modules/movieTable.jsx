@@ -1,9 +1,13 @@
 import React, { Component } from "react";
 import { getMovies } from "../services/fakeMovieService";
 import Like from "./like";
+import Pagination from "./pagination";
 
 class MovieTable extends Component {
-  state = {};
+  state = {
+    pageSize: 3,
+    currentPageIndex: 0,
+  };
 
   constructor() {
     super();
@@ -22,12 +26,21 @@ class MovieTable extends Component {
     movies[index] = { ...movies[index] };
     movies[index].isLiked = isEnabled;
     this.setState({ movies });
-    console.log(movies);
+  };
+
+  handlePaginationStateChanged = index => {
+    this.setState({ currentPageIndex: index });
   };
 
   render() {
     const size = this.state.movies.length;
+    const { pageSize, currentPageIndex } = this.state;
     if (size === 0) return <p>There are currently no more movies</p>;
+
+    const renderedMovies = this.state.movies.filter(
+      (val, index) => Math.floor(index / pageSize) === currentPageIndex
+    );
+
     return (
       // need react fragment, because jsx-expressions need a parent element
       <React.Fragment>
@@ -44,7 +57,7 @@ class MovieTable extends Component {
             </tr>
           </thead>
           <tbody>
-            {this.state.movies.map((movie, index) => (
+            {renderedMovies.map((movie, index) => (
               <tr key={movie._id}>
                 <td>{movie.title}</td>
                 <td>{movie.genre.name}</td>
@@ -70,6 +83,12 @@ class MovieTable extends Component {
             ))}
           </tbody>
         </table>
+        <Pagination
+          itemCount={size}
+          pageSize={pageSize}
+          currentPageIndex={currentPageIndex}
+          onStateChanged={this.handlePaginationStateChanged}
+        />
       </React.Fragment>
     );
   }
