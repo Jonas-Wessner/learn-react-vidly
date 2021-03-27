@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import { getMovies } from "../services/fakeMovieService";
+import Like from "./like";
 
 class MovieTable extends Component {
   state = {};
@@ -13,6 +14,15 @@ class MovieTable extends Component {
     this.setState({
       movies: this.state.movies.filter((elem, i) => i !== index),
     });
+  };
+
+  handleLikeToggle = (movie, isEnabled) => {
+    const movies = [...this.state.movies];
+    const index = movies.indexOf(movie);
+    movies[index] = { ...movies[index] };
+    movies[index].isLiked = isEnabled;
+    this.setState({ movies });
+    console.log(movies);
   };
 
   render() {
@@ -30,6 +40,7 @@ class MovieTable extends Component {
               <th scope="col">Stock</th>
               <th scope="col">Rate</th>
               <th scope="col"></th>
+              <th scope="col"></th>
             </tr>
           </thead>
           <tbody>
@@ -39,6 +50,13 @@ class MovieTable extends Component {
                 <td>{movie.genre.name}</td>
                 <td>{movie.numberInStock}</td>
                 <td>{movie.dailyRentalRate}</td>
+                <td>
+                  <Like
+                    onToggle={this.handleLikeToggle}
+                    bindingContext={movie}
+                    isEnabled={movie.isLiked}
+                  />
+                </td>
                 <td>
                   <button
                     id={index}
