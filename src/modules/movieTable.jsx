@@ -15,8 +15,15 @@ class MovieTable extends Component {
   }
 
   handleDelete = index => {
+    const movies = this.state.movies.filter((elem, i) => i !== index);
+    const { pageSize, currentPageIndex } = this.state;
     this.setState({
-      movies: this.state.movies.filter((elem, i) => i !== index),
+      movies: movies,
+      currentPageIndex: this.getValidCurrentPageIndex(
+        movies.length,
+        pageSize,
+        currentPageIndex
+      ),
     });
   };
 
@@ -32,19 +39,23 @@ class MovieTable extends Component {
     this.setState({ currentPageIndex: index });
   };
 
+  getValidCurrentPageIndex = (itemsCount, pageSize, currentPageIndex) => {
+    const pages = Math.ceil(itemsCount / pageSize);
+    return currentPageIndex < pages ? currentPageIndex : pages - 1;
+  };
+
   render() {
-    const size = this.state.movies.length;
-    const { pageSize, currentPageIndex } = this.state;
-    if (size === 0) return <p>There are currently no more movies</p>;
+    const { pageSize, currentPageIndex, movies } = this.state;
+    if (movies.length === 0) return <p>There are currently no more movies</p>;
 
     const renderedMovies = this.state.movies.filter(
-      (val, index) => Math.floor(index / pageSize) === currentPageIndex
+      (v, index) => Math.floor(index / pageSize) === currentPageIndex
     );
 
     return (
       // need react fragment, because jsx-expressions need a parent element
       <React.Fragment>
-        <p>Showing {size} movies in the database</p>
+        <p>Showing {movies.length} movies in the database</p>
         <table className="table">
           <thead>
             <tr>
@@ -84,7 +95,7 @@ class MovieTable extends Component {
           </tbody>
         </table>
         <Pagination
-          itemCount={size}
+          itemCount={movies.length}
           pageSize={pageSize}
           currentPageIndex={currentPageIndex}
           onStateChanged={this.handlePaginationStateChanged}

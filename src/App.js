@@ -46,7 +46,7 @@ class App extends Component {
     });
   };
 
-  handleLikeToggle = (undefined, isEnabled) => {
+  handleLikeToggle = (bC, isEnabled) => {
     const newState = { ...this.state };
     newState.isLiked = isEnabled;
     this.setState(newState);
