@@ -1,4 +1,5 @@
 import React, { Component } from "react";
+import PropTypes from "prop-types";
 
 class Counter extends Component {
   // directly returning the counter, not copying it into a property !
@@ -59,5 +60,14 @@ class Counter extends Component {
     return (classes += this.counter.value === 0 ? "light" : "secondary");
   };
 }
+
+Counter.propTypes = {
+  onIncrement: PropTypes.func.isRequired,
+  onDecrement: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  counter: PropTypes.shape({
+    value: PropTypes.number.isRequired,
+  }).isRequired,
+};
 
 export default Counter;

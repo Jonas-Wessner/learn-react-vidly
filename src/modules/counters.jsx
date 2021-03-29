@@ -1,5 +1,6 @@
 import React, { Component } from "react";
 import Counter from "./counter";
+import PropTypes from "prop-types";
 
 class Counters extends Component {
   render() {
@@ -30,5 +31,13 @@ class Counters extends Component {
     );
   }
 }
+
+Counter.propTypes = {
+  onIncrement: PropTypes.func.isRequired,
+  onDecrement: PropTypes.func.isRequired,
+  onDelete: PropTypes.func.isRequired,
+  onReset: PropTypes.func.isRequired,
+  counters: PropTypes.array.isRequired,
+};
 
 export default Counters;
