@@ -1,12 +1,20 @@
 import React, { Component } from "react";
 import { getMovies } from "../services/fakeMovieService";
+import GenrePicker from "./genrePicker";
 import Like from "./like";
 import Pagination from "./pagination";
 
+// TODO: When Deleting a Movie, the currentPageIndex is updated to be valid.
+// However, so far we check whether it is valid for the entire movies in the list.
+// instead we want to check if it is valid for the list of movies currently displayed.
+// Therefore we must move the filtered movies to this.state and validate the currentPageIndex every time this list changes.
+// Filtered List means after filtering for Genre
 class MovieTable extends Component {
   state = {
     pageSize: 3,
     currentPageIndex: 0,
+    currentGenreId: null,
+    movies: undefined,
   };
 
   constructor() {
@@ -35,8 +43,15 @@ class MovieTable extends Component {
     this.setState({ movies });
   };
 
-  handlePaginationStateChanged = index => {
+  handlePageChanged = index => {
     this.setState({ currentPageIndex: index });
+  };
+
+  handleGenreChanged = genre => {
+    console.log(genre);
+    this.setState({
+      currentGenreId: genre._id,
+    });
   };
 
   getValidCurrentPageIndex = (itemsCount, pageSize, currentPageIndex) => {
@@ -44,18 +59,36 @@ class MovieTable extends Component {
     return currentPageIndex < pages ? currentPageIndex : pages - 1;
   };
 
+  getFilteredMovies = movies => {
+    const { currentGenreId } = this.state;
+    return movies.filter(
+      (movie, i) =>
+        currentGenreId === null || movie.genre._id === currentGenreId
+    );
+  };
+
+  getRenderedMovies = movies => {
+    const { pageSize, currentPageIndex } = this.state;
+    return movies.filter(
+      (m, index) => Math.floor(index / pageSize) === currentPageIndex
+    );
+  };
+
   render() {
     const { pageSize, currentPageIndex, movies } = this.state;
-    if (movies.length === 0) return <p>There are currently no more movies</p>;
+    const filteredMovies = this.getFilteredMovies(movies);
+    const size = filteredMovies.length;
+    const renderedMovies = this.getRenderedMovies(filteredMovies);
 
-    const renderedMovies = this.state.movies.filter(
-      (v, index) => Math.floor(index / pageSize) === currentPageIndex
-    );
+    if (size === 0) return <p>There are currently no more movies</p>;
 
     return (
       // need react fragment, because jsx-expressions need a parent element
-      <React.Fragment>
-        <p>Showing {movies.length} movies in the database</p>
+      <div className="movie-table">
+        <GenrePicker
+          selectedGenreId={this.state.currentGenreId}
+          onStateChanged={this.handleGenreChanged}
+        />
         <table className="table">
           <thead>
             <tr>
@@ -95,12 +128,13 @@ class MovieTable extends Component {
           </tbody>
         </table>
         <Pagination
-          itemCount={movies.length}
+          itemCount={size}
           pageSize={pageSize}
           currentPageIndex={currentPageIndex}
-          onStateChanged={this.handlePaginationStateChanged}
+          onStateChanged={this.handlePageChanged}
         />
-      </React.Fragment>
+        <p>Showing {size} movies in the database</p>
+      </div>
     );
   }
 }

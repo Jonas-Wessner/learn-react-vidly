@@ -16,6 +16,8 @@ class Pagination extends Component {
       links.push(
         <li
           key={i}
+          // must let parent change the active state, because the parent is the
+          //one that initiates rerendering this component with a different currentPageId
           onClick={() => onStateChanged(i)}
           className={currentPageIndex === i ? "page-item active" : "page-item"}
         >
@@ -27,10 +29,11 @@ class Pagination extends Component {
   };
 
   render() {
-    // this component is only needed with multiple pages
-    if (this.pages <= 1) return null;
+    // return empty div instead of null in order to be still acquire the same space like before,
+    // when this will suddenly not be rendered at runtime due to a change of page sizes => to not break layout
+    if (this.pages <= 1) return <div />;
     return (
-      <nav aria-label="Page navigation example">
+      <nav>
         <ul className="pagination">{this.generateLinks()}</ul>
       </nav>
     );

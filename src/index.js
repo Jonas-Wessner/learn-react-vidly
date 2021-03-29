@@ -4,7 +4,8 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.css";
-import MovieTable from "./modules/movieTable";
+import MovieTable from "./components/movieTable";
+import GenrePicker from "./components/genrePicker";
 
 ReactDOM.render(
   <React.StrictMode>

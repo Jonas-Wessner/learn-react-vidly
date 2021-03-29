@@ -1,8 +1,8 @@
 import React, { Component } from "react";
 import "./App.css";
-import Counters from "./modules/counters";
-import Like from "./modules/like";
-import NavBar from "./modules/navBar";
+import Counters from "./components/counters";
+import Like from "./components/like";
+import NavBar from "./components/navBar";
 
 class App extends Component {
   state = {
