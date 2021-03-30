@@ -83,7 +83,6 @@ class MovieTable extends Component {
     if (size === 0) return <p>There are currently no more movies</p>;
 
     return (
-      // need react fragment, because jsx-expressions need a parent element
       <div className="movie-table">
         <GenrePicker
           selectedGenreId={this.state.currentGenreId}
