@@ -4,11 +4,11 @@ import GenrePicker from "./genrePicker";
 import Like from "./like";
 import Pagination from "./pagination";
 
-// TODO: When Deleting a Movie, the currentPageIndex is updated to be valid.
-// However, so far we check whether it is valid for the entire movies in the list.
-// instead we want to check if it is valid for the list of movies currently displayed.
-// Therefore we must move the filtered movies to this.state and validate the currentPageIndex every time this list changes.
-// Filtered List means after filtering for Genre
+// TODO: When we are on a certain page and then change
+// the genre the page numbers do not change. This can result
+// in that we are on an invalid page, if the former page does not exist anymore.
+// We have solved the same problem when deleting a movie with the getValidCurrentPageIndex-Method.
+// We must find a way to centrally solve this issue.
 class MovieTable extends Component {
   state = {
     pageSize: 3,
