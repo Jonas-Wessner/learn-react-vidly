@@ -4,6 +4,10 @@ import GenrePicker from "./genrePicker";
 import Like from "./like";
 import Pagination from "./pagination";
 
+// TODO: Wenn man sich auf Seite 3 befindet und alle Movies dort löscht wird die aktive Seite
+// im PaginationPicker zwar auf 2 geupdated, aber die Liste der Movies bleibt leer und scheint auf Seite 3 zu verharren.
+// klickt man dann ein weiteres Mal auf die ohnhin schon ausgewählte Seite 2,
+// so wird dann schließlich in der Liste das Richtige angezeigt
 class MovieTable extends Component {
   state = {
     pageSize: 3,
@@ -29,20 +33,21 @@ class MovieTable extends Component {
     const movies = this.state.movies.filter(mov => mov._id !== id);
     const { pageSize, currentPageIndex, currentGenreId } = this.state;
     const filteredMovies = this.filter(movies, currentGenreId);
+    const validPageIndex = this.getValidCurrentPageIndex(
+      filteredMovies.length,
+      pageSize,
+      currentPageIndex
+    );
     const paginatedMovies = this.paginate(
       filteredMovies,
       pageSize,
-      currentPageIndex
+      validPageIndex
     );
     this.setState({
       movies: movies,
       filteredMovies: filteredMovies,
       paginatedMovies: paginatedMovies,
-      currentPageIndex: this.getValidCurrentPageIndex(
-        movies.length,
-        pageSize,
-        currentPageIndex
-      ),
+      currentPageIndex: validPageIndex,
     });
   };
 
