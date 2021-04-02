@@ -8,7 +8,10 @@ class Like extends Component {
   render() {
     const { onToggle, isEnabled, bindingContext } = this.props;
     return (
-      <i onClick={() => onToggle(bindingContext, !isEnabled)}>
+      <i
+        style={{ cursor: "pointer" }}
+        onClick={() => onToggle(bindingContext, !isEnabled)}
+      >
         {isEnabled ? "Liked" : "Hated"}
       </i>
     );
