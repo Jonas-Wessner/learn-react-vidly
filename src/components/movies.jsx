@@ -1,10 +1,10 @@
 import React, { Component } from "react";
 import { getMovies } from "../services/fakeMovieService";
 import GenrePicker from "./genrePicker";
-import Like from "./like";
+import MoviesTable from "./moviesTable";
 import Pagination from "./pagination";
 
-class MovieTable extends Component {
+class Movies extends Component {
   state = {
     pageSize: 3,
     currentPageIndex: 0,
@@ -52,7 +52,14 @@ class MovieTable extends Component {
     const index = movies.indexOf(movie);
     movies[index] = { ...movies[index] };
     movies[index].isLiked = isEnabled;
-    this.setState({ movies });
+    const { currentGenreId, pageSize, currentPageIndex } = this.state;
+    const filteredMovies = this.filter(movies, currentGenreId);
+    const paginatedMovies = this.paginate(
+      filteredMovies,
+      pageSize,
+      currentPageIndex
+    );
+    this.setState({ movies, filteredMovies, paginatedMovies });
   };
 
   handlePageChanged = index => {
@@ -120,67 +127,27 @@ class MovieTable extends Component {
     const size = filteredMovies.length;
 
     return (
-      <div className="movie-table">
+      <div className="movies">
         <GenrePicker
           selectedGenreId={currentGenreId}
           onStateChanged={this.handleGenreChanged}
         />
-        {size <= 0 ? (
-          <p>There are currently no more movies</p>
-        ) : (
-          <React.Fragment>
-            <table className="table">
-              <thead>
-                <tr>
-                  <th scope="col">Title</th>
-                  <th scope="col">Genre</th>
-                  <th scope="col">Stock</th>
-                  <th scope="col">Rate</th>
-                  <th scope="col"></th>
-                  <th scope="col"></th>
-                </tr>
-              </thead>
-              <tbody>
-                {paginatedMovies.map((movie, index) => (
-                  <tr key={movie._id}>
-                    <td>{movie.title}</td>
-                    <td>{movie.genre.name}</td>
-                    <td>{movie.numberInStock}</td>
-                    <td>{movie.dailyRentalRate}</td>
-                    <td>
-                      <Like
-                        onToggle={this.handleLikeToggle}
-                        bindingContext={movie}
-                        isEnabled={movie.isLiked}
-                      />
-                    </td>
-                    <td>
-                      <button
-                        id={movie._id}
-                        onClick={() => this.handleDelete(movie._id)}
-                        className="btn btn-danger"
-                      >
-                        Delete
-                      </button>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            <Pagination
-              itemCount={size}
-              pageSize={pageSize}
-              currentPageIndex={currentPageIndex}
-              onStateChanged={this.handlePageChanged}
-            />
-            <p>
-              Showing {size}/{movies.length} movies in the database
-            </p>
-          </React.Fragment>
-        )}
+        <MoviesTable
+          totalSize={movies.length}
+          filteredSize={filteredMovies.length}
+          paginatedMovies={paginatedMovies}
+          onLikeToggle={this.handleLikeToggle}
+          onDelete={this.handleDelete}
+        />
+        <Pagination
+          itemCount={size}
+          pageSize={pageSize}
+          currentPageIndex={currentPageIndex}
+          onStateChanged={this.handlePageChanged}
+        />
       </div>
     );
   }
 }
 
-export default MovieTable;
+export default Movies;

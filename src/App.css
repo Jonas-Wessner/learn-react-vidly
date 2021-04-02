@@ -74,7 +74,7 @@
   cursor: pointer;
 }
 
-.movie-table {
+.movies {
   display: grid;
   justify-content: start;
   align-items: flex-start;

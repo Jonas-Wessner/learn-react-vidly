@@ -4,12 +4,12 @@ import "./index.css";
 import App from "./App";
 import reportWebVitals from "./reportWebVitals";
 import "bootstrap/dist/css/bootstrap.css";
-import MovieTable from "./components/movieTable";
+import Movies from "./components/movies";
 import GenrePicker from "./components/genrePicker";
 
 ReactDOM.render(
   <React.StrictMode>
-    <MovieTable />
+    <Movies />
   </React.StrictMode>,
   document.getElementById("root")
 );
