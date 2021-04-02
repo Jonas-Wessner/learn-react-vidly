@@ -12,14 +12,6 @@ class Movies extends Component {
     movies: undefined,
   };
 
-  /** The currentPageIndex in the state might be invalidated when deleting a movie,
-   * because a page might be empty and therefore no more be valid.
-   * We don't want to reset the currentPage index in the handleDelete-method,
-   * because that requires knowledge about the filteredMovies, because the number of filteredMovies
-   * determines the number of pages displayed and therefore the range of valid pageIndexes
-   * Therefore we validate the currentPageIndex in the renderMethod and then use that value instead */
-  validCurrentPageIndex = undefined;
-
   constructor() {
     super();
     this.state.movies = getMovies();
@@ -29,6 +21,7 @@ class Movies extends Component {
     const movies = this.state.movies.filter(mov => mov._id !== id);
     this.setState({
       movies: movies,
+      currentPageIndex: this.getValidCurrentPageIndex(movies),
     });
   };
 
@@ -53,8 +46,20 @@ class Movies extends Component {
     });
   };
 
-  getValidCurrentPageIndex = itemsCount => {
+  // defines how filtering is performed
+  matchesFilter = movie => {
+    const { currentGenreId } = this.state;
+    return currentGenreId === null || movie.genre._id === currentGenreId;
+  };
+
+  getValidCurrentPageIndex = movies => {
+    const itemsCount = movies.reduce(
+      (acc, movie) => acc + this.matchesFilter(movie),
+      0
+    );
+
     const { pageSize, currentPageIndex } = this.state;
+
     const pages = Math.ceil(itemsCount / pageSize);
     if (pages === 0) {
       return 0;
@@ -65,28 +70,20 @@ class Movies extends Component {
   };
 
   getFilteredMovies = () => {
-    const { currentGenreId } = this.state;
-    return this.state.movies.filter(
-      (movie, i) =>
-        currentGenreId === null || movie.genre._id === currentGenreId
-    );
+    return this.state.movies.filter((movie, i) => this.matchesFilter(movie));
   };
 
   getPaginatedMovies = movies => {
-    // when deleting items the currentPageIndex might have become invalid, because the page might be empty now
-    const { pageSize } = this.state;
+    const { pageSize, currentPageIndex } = this.state;
     return movies.filter(
-      (m, index) => Math.floor(index / pageSize) === this.validCurrentPageIndex
+      (m, index) => Math.floor(index / pageSize) === currentPageIndex
     );
   };
 
   render() {
-    const { pageSize, movies, currentGenreId } = this.state;
+    const { pageSize, movies, currentGenreId, currentPageIndex } = this.state;
 
     const filteredMovies = this.getFilteredMovies();
-    this.validCurrentPageIndex = this.getValidCurrentPageIndex(
-      filteredMovies.length
-    );
     const paginatedMovies = this.getPaginatedMovies(filteredMovies);
 
     return (
@@ -105,7 +102,7 @@ class Movies extends Component {
         <Pagination
           itemCount={filteredMovies.length}
           pageSize={pageSize}
-          currentPageIndex={this.validCurrentPageIndex}
+          currentPageIndex={currentPageIndex}
           onStateChanged={this.handlePageChanged}
         />
       </div>
