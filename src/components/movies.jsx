@@ -10,40 +10,25 @@ class Movies extends Component {
     currentPageIndex: 0,
     currentGenreId: null,
     movies: undefined,
-    filteredMovies: undefined,
-    paginatedMovies: undefined,
   };
+
+  /** The currentPageIndex in the state might be invalidated when deleting a movie,
+   * because a page might be empty and therefore no more be valid.
+   * We don't want to reset the currentPage index in the handleDelete-method,
+   * because that requires knowledge about the filteredMovies, because the number of filteredMovies
+   * determines the number of pages displayed and therefore the range of valid pageIndexes
+   * Therefore we validate the currentPageIndex in the renderMethod and then use that value instead */
+  validCurrentPageIndex = undefined;
 
   constructor() {
     super();
     this.state.movies = getMovies();
-    this.state.filteredMovies = this.state.movies; // no filters to start with
-    this.state.paginatedMovies = this.paginate(
-      this.state.filteredMovies,
-      this.state.pageSize,
-      this.state.currentPageIndex
-    );
   }
 
   handleDelete = id => {
     const movies = this.state.movies.filter(mov => mov._id !== id);
-    const { pageSize, currentPageIndex, currentGenreId } = this.state;
-    const filteredMovies = this.filter(movies, currentGenreId);
-    const validPageIndex = this.getValidCurrentPageIndex(
-      filteredMovies.length,
-      pageSize,
-      currentPageIndex
-    );
-    const paginatedMovies = this.paginate(
-      filteredMovies,
-      pageSize,
-      validPageIndex
-    );
     this.setState({
       movies: movies,
-      filteredMovies: filteredMovies,
-      paginatedMovies: paginatedMovies,
-      currentPageIndex: validPageIndex,
     });
   };
 
@@ -52,47 +37,24 @@ class Movies extends Component {
     const index = movies.indexOf(movie);
     movies[index] = { ...movies[index] };
     movies[index].isLiked = isEnabled;
-    const { currentGenreId, pageSize, currentPageIndex } = this.state;
-    const filteredMovies = this.filter(movies, currentGenreId);
-    const paginatedMovies = this.paginate(
-      filteredMovies,
-      pageSize,
-      currentPageIndex
-    );
-    this.setState({ movies, filteredMovies, paginatedMovies });
+    this.setState({ movies });
   };
 
   handlePageChanged = index => {
-    const { movies, pageSize } = this.state;
     this.setState({
       currentPageIndex: index,
-      paginatedMovies: this.paginate(movies, pageSize, index),
     });
   };
 
   handleGenreChanged = genre => {
-    const { movies, pageSize, currentPageIndex } = this.state;
-    const filteredMovies = this.filter(movies, genre._id);
-    const validPageIndex = this.getValidCurrentPageIndex(
-      filteredMovies.length,
-      pageSize,
-      currentPageIndex
-    );
-    const paginatedMovies = this.paginate(
-      filteredMovies,
-      pageSize,
-      validPageIndex
-    );
-    console.log(genre);
     this.setState({
       currentGenreId: genre._id,
-      filteredMovies: filteredMovies,
-      paginatedMovies: paginatedMovies,
-      currentPageIndex: validPageIndex,
+      currentPageIndex: 0, // start looking at new genre from first page
     });
   };
 
-  getValidCurrentPageIndex = (itemsCount, pageSize, currentPageIndex) => {
+  getValidCurrentPageIndex = itemsCount => {
+    const { pageSize, currentPageIndex } = this.state;
     const pages = Math.ceil(itemsCount / pageSize);
     if (pages === 0) {
       return 0;
@@ -102,29 +64,30 @@ class Movies extends Component {
       : pages - 1;
   };
 
-  filter = (movies, currentGenreId) => {
-    return movies.filter(
+  getFilteredMovies = () => {
+    const { currentGenreId } = this.state;
+    return this.state.movies.filter(
       (movie, i) =>
         currentGenreId === null || movie.genre._id === currentGenreId
     );
   };
 
-  paginate = (movies, pageSize, currentPageIndex) => {
+  getPaginatedMovies = movies => {
+    // when deleting items the currentPageIndex might have become invalid, because the page might be empty now
+    const { pageSize } = this.state;
     return movies.filter(
-      (m, index) => Math.floor(index / pageSize) === currentPageIndex
+      (m, index) => Math.floor(index / pageSize) === this.validCurrentPageIndex
     );
   };
 
   render() {
-    const {
-      pageSize,
-      currentPageIndex,
-      currentGenreId,
-      movies,
-      filteredMovies,
-      paginatedMovies,
-    } = this.state;
-    const size = filteredMovies.length;
+    const { pageSize, movies, currentGenreId } = this.state;
+
+    const filteredMovies = this.getFilteredMovies();
+    this.validCurrentPageIndex = this.getValidCurrentPageIndex(
+      filteredMovies.length
+    );
+    const paginatedMovies = this.getPaginatedMovies(filteredMovies);
 
     return (
       <div className="movies">
@@ -140,9 +103,9 @@ class Movies extends Component {
           onDelete={this.handleDelete}
         />
         <Pagination
-          itemCount={size}
+          itemCount={movies.length}
           pageSize={pageSize}
-          currentPageIndex={currentPageIndex}
+          currentPageIndex={this.validCurrentPageIndex}
           onStateChanged={this.handlePageChanged}
         />
       </div>
