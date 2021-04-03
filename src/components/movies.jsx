@@ -10,6 +10,7 @@ class Movies extends Component {
     currentPageIndex: 0,
     currentGenreId: null,
     movies: undefined,
+    sortColumn: { path: "title", order: "asc" },
   };
 
   constructor() {
@@ -44,6 +45,11 @@ class Movies extends Component {
       currentGenreId: genre._id,
       currentPageIndex: 0, // start looking at new genre from first page
     });
+  };
+
+  handleSort = sortColumn => {
+    this.setState({ sortColumn });
+    console.log(sortColumn);
   };
 
   // defines how filtering is performed
@@ -81,10 +87,23 @@ class Movies extends Component {
   };
 
   render() {
-    const { pageSize, movies, currentGenreId, currentPageIndex } = this.state;
+    const {
+      pageSize,
+      movies,
+      currentGenreId,
+      currentPageIndex,
+      sortColumn,
+    } = this.state;
 
     const filteredMovies = this.getFilteredMovies();
-    const paginatedMovies = this.getPaginatedMovies(filteredMovies);
+
+    const sortedMovies = filteredMovies.sort((a, b) => {
+      let ret = a[sortColumn.path] > b[sortColumn.path];
+      return sortColumn.order === "asc" ? ret : !ret;
+    });
+    console.log(sortedMovies);
+
+    const paginatedMovies = this.getPaginatedMovies(sortedMovies);
 
     return (
       <div className="movies">
@@ -96,6 +115,8 @@ class Movies extends Component {
           totalSize={movies.length}
           filteredSize={filteredMovies.length}
           paginatedMovies={paginatedMovies}
+          sortColumn={sortColumn}
+          onSort={this.handleSort}
           onLikeToggle={this.handleLikeToggle}
           onDelete={this.handleDelete}
         />
