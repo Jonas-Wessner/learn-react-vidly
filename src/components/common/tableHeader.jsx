@@ -20,6 +20,19 @@ class TableHeader extends Component {
     onSort(column);
   };
 
+  renderSortIcon = column => {
+    const { sortColumn } = this.props;
+
+    // if this is not the column to be sorted, do not display an icon
+    if (column.path !== sortColumn.path) return null;
+
+    if (sortColumn.order === "asc") {
+      return "\uD83E\uDC15";
+    } else {
+      return "\uD83E\uDC17";
+    }
+  };
+
   render() {
     const { columns } = this.props;
     return (
@@ -34,6 +47,7 @@ class TableHeader extends Component {
                 scope="col"
               >
                 {column.name}
+                {this.renderSortIcon(column)}
               </th>
             );
           })}
