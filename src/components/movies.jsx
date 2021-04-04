@@ -3,6 +3,7 @@ import { getMovies } from "../services/fakeMovieService";
 import GenrePicker from "./genrePicker";
 import MoviesTable from "./moviesTable";
 import Pagination from "./pagination";
+import _ from "lodash";
 
 class Movies extends Component {
   state = {
@@ -49,7 +50,6 @@ class Movies extends Component {
 
   handleSort = sortColumn => {
     this.setState({ sortColumn });
-    console.log(sortColumn);
   };
 
   // defines how filtering is performed
@@ -97,11 +97,11 @@ class Movies extends Component {
 
     const filteredMovies = this.getFilteredMovies();
 
-    const sortedMovies = filteredMovies.sort((a, b) => {
-      let ret = a[sortColumn.path] > b[sortColumn.path];
-      return sortColumn.order === "asc" ? ret : !ret;
-    });
-    console.log(sortedMovies);
+    const sortedMovies = _.orderBy(
+      filteredMovies,
+      [sortColumn.path], // filtered path, nested paths separated by "." are allowed
+      [sortColumn.order]
+    );
 
     const paginatedMovies = this.getPaginatedMovies(sortedMovies);
 

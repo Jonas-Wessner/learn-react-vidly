@@ -1,20 +1,17 @@
 import div, { Component } from "react";
 import Like from "./like";
 import PropTypes from "prop-types";
+import TableHeader from "./common/tableHeader";
 
 class MoviesTable extends Component {
-  raiseSort = path => {
-    const { onSort, sortColumn } = this.props;
-    const column = { ...sortColumn };
-
-    if (column.path === path) {
-      column.order = column.order === "asc" ? "desc" : "asc";
-    } else {
-      column.path = path;
-    }
-
-    onSort(column);
-  };
+  columns = [
+    { path: "title", name: "Title" },
+    { path: "genre.name", name: "Genre" },
+    { path: "numberInStock", name: "Stock" },
+    { path: "dailyRentalRate", name: "Rate" },
+    {}, // no heading for those columns
+    {},
+  ];
 
   render() {
     const {
@@ -23,6 +20,8 @@ class MoviesTable extends Component {
       paginatedMovies,
       onLikeToggle,
       onDelete,
+      sortColumn,
+      onSort,
     } = this.props;
 
     if (filteredSize <= 0) {
@@ -31,40 +30,11 @@ class MoviesTable extends Component {
     return (
       <div className="movies-table">
         <table className="table">
-          <thead>
-            <tr>
-              <th
-                style={{ cursor: "pointer" }}
-                onClick={() => this.raiseSort("title")}
-                scope="col"
-              >
-                Title
-              </th>
-              <th
-                style={{ cursor: "pointer" }}
-                onClick={() => this.raiseSort("genre.name")}
-                scope="col"
-              >
-                Genre
-              </th>
-              <th
-                style={{ cursor: "pointer" }}
-                onClick={() => this.raiseSort("numberInStock")}
-                scope="col"
-              >
-                Stock
-              </th>
-              <th
-                style={{ cursor: "pointer" }}
-                onClick={() => this.raiseSort("dailyRentalRate")}
-                scope="col"
-              >
-                Rate
-              </th>
-              <th scope="col"></th>
-              <th scope="col"></th>
-            </tr>
-          </thead>
+          <TableHeader
+            columns={this.columns}
+            sortColumn={sortColumn}
+            onSort={onSort}
+          />
           <tbody>
             {paginatedMovies.map((movie, i) => (
               <tr key={movie._id}>
