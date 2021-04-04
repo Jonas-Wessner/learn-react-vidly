@@ -2,15 +2,37 @@ import div, { Component } from "react";
 import Like from "./like";
 import PropTypes from "prop-types";
 import TableHeader from "./common/tableHeader";
+import TableBody from "./common/tableBody";
 
 class MoviesTable extends Component {
+  // path is the path to the property displayed, name is the name displayed in the table-header
   columns = [
     { path: "title", name: "Title" },
     { path: "genre.name", name: "Genre" },
     { path: "numberInStock", name: "Stock" },
     { path: "dailyRentalRate", name: "Rate" },
-    {}, // no heading for those columns
-    {},
+    // last to columns have no path or name, but they have a content property
+    // which is a function that returns a jsx-expression when given a row as parameter
+    {
+      getContent: movie => (
+        <Like
+          onToggle={this.props.onLikeToggle}
+          bindingContext={movie}
+          isEnabled={movie.isLiked}
+        />
+      ),
+    },
+    {
+      getContent: movie => (
+        <button
+          id={movie._id}
+          onClick={() => this.props.onDelete(movie._id)}
+          className="btn btn-danger"
+        >
+          Delete
+        </button>
+      ),
+    },
   ];
 
   render() {
@@ -35,32 +57,7 @@ class MoviesTable extends Component {
             sortColumn={sortColumn}
             onSort={onSort}
           />
-          <tbody>
-            {paginatedMovies.map((movie, i) => (
-              <tr key={movie._id}>
-                <td>{movie.title}</td>
-                <td>{movie.genre.name}</td>
-                <td>{movie.numberInStock}</td>
-                <td>{movie.dailyRentalRate}</td>
-                <td>
-                  <Like
-                    onToggle={onLikeToggle}
-                    bindingContext={movie}
-                    isEnabled={movie.isLiked}
-                  />
-                </td>
-                <td>
-                  <button
-                    id={movie._id}
-                    onClick={() => onDelete(movie._id)}
-                    className="btn btn-danger"
-                  >
-                    Delete
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
+          <TableBody data={paginatedMovies} columns={this.columns} />
         </table>
         <p>
           Showing {filteredSize}/{totalSize} movies in the database
