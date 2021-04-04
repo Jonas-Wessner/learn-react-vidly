@@ -12,7 +12,7 @@ class Like extends Component {
         style={{ cursor: "pointer" }}
         onClick={() => onToggle(bindingContext, !isEnabled)}
       >
-        {isEnabled ? "Liked" : "Hated"}
+        {isEnabled ? "\u2764" : "\u2661"}
       </i>
     );
   }
