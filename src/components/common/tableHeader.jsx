@@ -62,7 +62,7 @@ TableHeader.propTypes = {
   // [{path: ???, name: ???}, ...]
   columns: PropTypes.array.isRequired,
   sortColumn: PropTypes.object.isRequired, // {path: ???, order: ???} determining which column is the current sortColumn
-  onSort: PropTypes.func.isRequired, // event that is raised when a colums header is clicked to be sorted
+  onSort: PropTypes.func.isRequired, // handler for event that is raised when a columns header is clicked to be sorted
 };
 
 export default TableHeader;
