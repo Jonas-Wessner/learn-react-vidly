@@ -1,77 +1,34 @@
 import React, { Component } from "react";
+import { Redirect, Route, Switch } from "react-router-dom";
 import "./App.css";
-import Counters from "./components/counters";
-import Like from "./components/like";
 import NavBar from "./components/navBar";
+import Movies from "./components/movies";
+import Rentals from "./components/rentals";
+import Customers from "./components/customers";
+import MovieForm from "./components/movieForm";
+import NotFound from "./components/notFound";
 
 class App extends Component {
-  state = {
-    isLiked: false,
-    counters: [
-      { value: 1, id: 0 },
-      { value: 2, id: 1 },
-      { value: 12, id: 2 },
-    ],
-  };
-
-  handleDelete = counter => {
-    this.setState({
-      counters: this.state.counters.filter(elem => elem.id !== counter.id),
-    });
-  };
-
-  updateCounterValue = (counter, value) => {
-    const c = [...this.state.counters]; // clone counters
-    const index = c.indexOf(counter);
-    c[index] = { ...counter }; // clone relevant counter, because is is so far still referencing the counter in the state
-    c[index].value = value; // increment new value without modifying this.state
-    this.setState({ counters: c }); // let react properly update this.state
-  };
-
-  handleIncrement = counter => {
-    this.updateCounterValue(counter, counter.value + 1);
-  };
-
-  handleDecrement = counter => {
-    this.updateCounterValue(counter, counter.value - 1);
-  };
-
-  handleReset = () => {
-    this.setState({
-      counters: this.state.counters.map(counter => {
-        const c = { ...counter };
-        c.value = 0;
-        return c;
-      }),
-    });
-  };
-
-  handleLikeToggle = (bC, isEnabled) => {
-    const newState = { ...this.state };
-    newState.isLiked = isEnabled;
-    this.setState(newState);
-  };
-
-  render() {
+  render = () => {
     return (
       <React.Fragment>
-        <NavBar counters={this.state.counters} />
-        <main className="container">
-          <Like
-            isEnabled={this.state.isLiked}
-            onToggle={this.handleLikeToggle}
-          />
-          <Counters
-            counters={this.state.counters}
-            onReset={this.handleReset}
-            onIncrement={this.handleIncrement}
-            onDecrement={this.handleDecrement}
-            onDelete={this.handleDelete}
-          />
-        </main>
+        <NavBar />
+        <div className="content">
+          <Switch>
+            <Route path="/movies/:id" component={MovieForm} />
+            <Route path="/movies" component={Movies} />
+            <Route path="/customers" component={Customers} />
+            <Route path="/rentals" component={Rentals} />
+            {/* :id means that the component will get this part fo the url passed
+            in props.match.params as attribute with the name id */}
+            <Route path="/not-found" component={NotFound} />
+            <Redirect exact from="/" to="/movies" />
+            <Redirect to="not-found" />
+          </Switch>
+        </div>
       </React.Fragment>
     );
-  }
+  };
 }
 
 export default App;

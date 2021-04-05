@@ -1,21 +1,41 @@
+import { Link, NavLink } from "react-router-dom";
+
 // stateless functional Component
 // this is a component that has not own state and therefore
 // can be built as a function that receives the props as a parameter
-// using it from the outside is exactly as if it was a full component extending the component class
+// using it from the outside is exactly as if it was a full component extending the component className
 
-const NavBar = ({ counters }) => {
+const NavBar = () => {
   return (
-    <nav id="navbar" className="navbar navbar-light bg-light">
-      <a className="navbar-brand" href="#">
-        NavBar
-      </a>
-      <span className="badge badge-success">
-        {counters.reduce((acc, counter) => {
-          return acc + counter.value;
-        }, 0)}
-      </span>
+    <nav className="navbar navbar-expand-lg navbar-light bg-light">
+      <Link className="navbar-brand" to="/">
+        Vidly
+      </Link>
+      <button
+        className="navbar-toggler"
+        type="button"
+        data-toggle="collapse"
+        data-target="#navbarNavAltMarkup"
+        aria-controls="navbarNavAltMarkup"
+        aria-expanded="false"
+        aria-label="Toggle navigation"
+      >
+        <span className="navbar-toggler-icon"></span>
+      </button>
+      <div className="collapse navbar-collapse" id="navbarNavAltMarkup">
+        <div className="navbar-nav">
+          <NavLink className="nav-item nav-link" to="/movies">
+            Movies
+          </NavLink>
+          <NavLink className="nav-item nav-link" to="/customers">
+            Customers
+          </NavLink>
+          <NavLink className="nav-item nav-link" to="/rentals">
+            Rentals
+          </NavLink>
+        </div>
+      </div>
     </nav>
   );
 };
-
 export default NavBar;

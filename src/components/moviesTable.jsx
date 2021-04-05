@@ -1,4 +1,5 @@
 import { Component } from "react";
+import { Link } from "react-router-dom";
 import Like from "./like";
 import PropTypes from "prop-types";
 import Table from "./common/table";
@@ -6,7 +7,13 @@ import Table from "./common/table";
 class MoviesTable extends Component {
   // path is the path to the property displayed, name is the name displayed in the table-header
   columns = [
-    { path: "title", name: "Title" },
+    {
+      path: "title",
+      name: "Title",
+      getContent: movie => (
+        <Link to={`/movies/${movie._id}`}>{movie.title}</Link>
+      ),
+    },
     { path: "genre.name", name: "Genre" },
     { path: "numberInStock", name: "Stock" },
     { path: "dailyRentalRate", name: "Rate" },
