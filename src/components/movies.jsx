@@ -86,24 +86,35 @@ class Movies extends Component {
     );
   };
 
-  render() {
-    const {
-      pageSize,
-      movies,
-      currentGenreId,
-      currentPageIndex,
-      sortColumn,
-    } = this.state;
+  getRenderedData = () => {
+    const { sortColumn } = this.state;
 
     const filteredMovies = this.getFilteredMovies();
 
     const sortedMovies = _.orderBy(
       filteredMovies,
-      [sortColumn.path], // filtered path, nested paths separated by "." are allowed
+      [sortColumn.path], // filtered path, nested paths separated by "." are allowed with lodash
       [sortColumn.order]
     );
 
     const paginatedMovies = this.getPaginatedMovies(sortedMovies);
+
+    return {
+      filteredSize: filteredMovies.length,
+      movies: paginatedMovies,
+    };
+  };
+
+  render() {
+    const {
+      movies: allMovies,
+      pageSize,
+      currentGenreId,
+      currentPageIndex,
+      sortColumn,
+    } = this.state;
+
+    const { filteredSize, movies } = this.getRenderedData();
 
     return (
       <div className="movies">
@@ -112,16 +123,16 @@ class Movies extends Component {
           onStateChanged={this.handleGenreChanged}
         />
         <MoviesTable
-          totalSize={movies.length}
-          filteredSize={filteredMovies.length}
-          paginatedMovies={paginatedMovies}
+          totalSize={allMovies.length}
+          filteredSize={filteredSize}
+          paginatedMovies={movies}
           sortColumn={sortColumn}
           onSort={this.handleSort}
           onLikeToggle={this.handleLikeToggle}
           onDelete={this.handleDelete}
         />
         <Pagination
-          itemCount={filteredMovies.length}
+          itemCount={filteredSize}
           pageSize={pageSize}
           currentPageIndex={currentPageIndex}
           onStateChanged={this.handlePageChanged}
