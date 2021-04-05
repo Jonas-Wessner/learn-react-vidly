@@ -1,8 +1,7 @@
-import div, { Component } from "react";
+import { Component } from "react";
 import Like from "./like";
 import PropTypes from "prop-types";
-import TableHeader from "./common/tableHeader";
-import TableBody from "./common/tableBody";
+import Table from "./common/table";
 
 class MoviesTable extends Component {
   // path is the path to the property displayed, name is the name displayed in the table-header
@@ -40,8 +39,6 @@ class MoviesTable extends Component {
       totalSize,
       filteredSize,
       paginatedMovies,
-      onLikeToggle,
-      onDelete,
       sortColumn,
       onSort,
     } = this.props;
@@ -51,14 +48,12 @@ class MoviesTable extends Component {
     }
     return (
       <div className="movies-table">
-        <table className="table">
-          <TableHeader
-            columns={this.columns}
-            sortColumn={sortColumn}
-            onSort={onSort}
-          />
-          <TableBody data={paginatedMovies} columns={this.columns} />
-        </table>
+        <Table
+          columns={this.columns}
+          sortColumn={sortColumn}
+          data={paginatedMovies}
+          onSort={onSort}
+        />
         <p>
           Showing {filteredSize}/{totalSize} movies in the database
         </p>
