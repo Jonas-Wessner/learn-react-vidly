@@ -2,8 +2,6 @@ import React from "react";
 import "font-awesome/css/font-awesome.css";
 import PropTypes from "prop-types";
 
-export default Like;
-
 const Like = ({ onToggle, isEnabled, bindingContext }) => {
   return (
     <i
