@@ -2,8 +2,6 @@ import React, { Component } from "react";
 import PropTypes from "prop-types";
 
 class Pagination extends Component {
-  state = {};
-
   get pages() {
     const { itemCount, pageSize } = this.props;
     return Math.ceil(itemCount / pageSize);
