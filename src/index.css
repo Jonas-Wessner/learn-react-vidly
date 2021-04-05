@@ -62,8 +62,8 @@ code {
   cursor: pointer;
 }
 
-.movieTable th,
-.movieTable td {
+.movies-table th,
+.movies-table td {
   width: 100px;
   overflow: hidden;
 }
