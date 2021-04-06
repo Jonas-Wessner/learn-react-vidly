@@ -1,18 +1,17 @@
 import React from "react";
 import PropTypes from "prop-types";
 
-const Input = ({ name, label, value, error, onChange, autoFocus }) => {
+// ...rest is used to pass any further arguments down by exactly their name.
+const Input = ({ name, label, error, ...rest }) => {
   return (
     <div className="form-group">
       <label htmlFor={name}>{label}</label>
       <input
         id={name}
         name={name}
-        value={value}
-        onChange={onChange}
         type="text"
         className="form-control"
-        autoFocus={autoFocus}
+        {...rest}
       />
       {/* only display when error is truthy */}
       {error && <div className="alert alert-danger">{error}</div>}
