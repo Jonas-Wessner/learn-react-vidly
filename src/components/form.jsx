@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import Joi, { errors } from "joi-browser";
+import Joi from "joi-browser";
 import Input from "./input";
 import { empty } from "./common/utils";
 

@@ -1,5 +1,5 @@
-import React, { Component } from "react";
-import Joi, { errors } from "joi-browser";
+import React from "react";
+import Joi from "joi-browser";
 import Form from "./form";
 
 class LoginForm extends Form {
@@ -31,6 +31,7 @@ class LoginForm extends Form {
         {this.renderInput({
           name: "password",
           label: "Password",
+          type: "password",
         })}
       </React.Fragment>
     );

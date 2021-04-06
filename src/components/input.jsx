@@ -2,14 +2,14 @@ import React from "react";
 import PropTypes from "prop-types";
 
 // ...rest is used to pass any further arguments down by exactly their name.
-const Input = ({ name, label, error, ...rest }) => {
+const Input = ({ name, label, error, type = "text", ...rest }) => {
   return (
     <div className="form-group">
       <label htmlFor={name}>{label}</label>
       <input
         id={name}
         name={name}
-        type="text"
+        type={type}
         className="form-control"
         {...rest}
       />
