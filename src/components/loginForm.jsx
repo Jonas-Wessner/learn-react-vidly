@@ -1,6 +1,7 @@
 import React, { Component } from "react";
 import Input from "./input";
 import Joi, { errors } from "joi-browser";
+import { empty } from "./common/utils";
 
 class LoginForm extends Component {
   state = {
@@ -30,12 +31,21 @@ class LoginForm extends Component {
     return errors;
   };
 
-  // this method validates only the given property
+  // returns a new error object that results from this.state.errors with the given property updated
   validateProperty = ({ name, value }) => {
     const toValidate = { [name]: value };
     const schema = { [name]: this.schema[name] };
     const { error } = Joi.validate(toValidate, schema);
-    return error ? error.details[0].message : null;
+
+    const errors = { ...this.state.errors };
+
+    if (error) {
+      errors[name] = error.details[0].message; // set error if present
+    } else {
+      delete errors[name]; // clear error if not present
+    }
+
+    return errors;
   };
 
   /* By default the submission of a form results in a full page reload.
@@ -47,20 +57,14 @@ class LoginForm extends Component {
     console.log(errors);
 
     this.setState({ errors });
-    if (Object.keys(errors).length > 0) return; // if there are error, stop submission
+    if (!empty(errors)) return; // if there are error, stop submission
 
     // Call Server and redirect user
     console.log("Submitted");
   };
 
   handleChange = ({ currentTarget: input }) => {
-    const errors = { ...this.state.errors };
-    const errorMessage = this.validateProperty(input);
-    if (errorMessage) {
-      errors[input.name] = errorMessage; // set error if present
-    } else {
-      delete errors[input.name]; // clear error if not present
-    }
+    const errors = this.validateProperty(input);
 
     const account = { ...this.state.account };
     account[input.id] = input.value;
@@ -89,7 +93,14 @@ class LoginForm extends Component {
             onChange={this.handleChange}
             error={errors.password}
           />
-          <button className="btn btn-primary">Login</button>
+          <button
+            className={"btn btn-primary"}
+            // cannot use this.state.errors, because this will only hold the errors displayed to the user,
+            // e.g. in the beginning there are no errors, but the form is still not valid and should not be submittable
+            disabled={!empty(this.validate())}
+          >
+            Login
+          </button>
         </form>
       </div>
     );
