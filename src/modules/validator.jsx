@@ -58,104 +58,90 @@ class Validator {
     return true;
   };
 
-  getLabel = alternative => {
+  #getLabel = alternative => {
     const label = this.#label ? this.#label : alternative;
     return `"${label}"`;
   };
 
-  /**
-   *  specifies that a property cannot be null, undefined, an empty array, or an empty object
-   * @returns the current Object => chainable
-   */
-  notEmpty = () => {
+  #addValidatorFunction = (condition, message) => {
     this.validatorFunctions.push((value, key) => {
-      const message = `${this.getLabel(key)} is not allowed to be empty`;
-      if (!value || value === "" || empty(value)) {
-        return message;
-      }
-      return null;
+      return condition(value) ? null : `${this.#getLabel(key)} ${message}`;
     });
     return this;
+  };
+
+  /**
+   *
+   * @param {function(String)} func a function that takes a string and returns truthy if it is a valid input, otherwise falsy
+   * @param {String} errorMessage e.g.: "is not allowed to include backticks". The label will at the front at the beginning automatically
+   * @returns
+   */
+  custom = (func, errorMessage) => {
+    return this.#addValidatorFunction(func, errorMessage);
+  };
+
+  /**
+   *  specifies that a property cannot be null, undefined, or an empty string
+   *  chainible
+   */
+  notEmpty = () => {
+    // truthy if not null, undefined or empty string
+    return this.#addValidatorFunction(
+      value => value,
+      `is not allowed to be empty`
+    );
   };
 
   minLength = min => {
-    this.validatorFunctions.push((value, key) => {
-      const message = `${this.getLabel(
-        key
-      )} must have a minimum length of ${min} characters`;
-
-      console.log(value, min);
-      return value.length < min ? message : null;
-    });
-    return this;
+    return this.#addValidatorFunction(
+      value => value.length >= min,
+      `must have a minimum length of ${min} characters`
+    );
   };
 
   maxLength = max => {
-    this.validatorFunctions.push((value, key) => {
-      const message = `${this.getLabel(
-        key
-      )} must have a maximum length of ${max} characters`;
-
-      return value.length > max ? message : null;
-    });
-    return this;
+    return this.#addValidatorFunction(
+      value => value.length <= max,
+      `must have a maximum length of ${max} characters`
+    );
   };
 
   minValue = min => {
-    this.validatorFunctions.push((value, key) => {
-      const message = `${this.getLabel(
-        key
-      )} must be greater than or equal to ${min}`;
-
-      return value < min ? message : null;
-    });
-    return this;
+    return this.#addValidatorFunction(
+      value => value >= min,
+      `must be greater than or equal to ${min}`
+    );
   };
 
   maxValue = max => {
-    this.validatorFunctions.push((value, key) => {
-      const message = `${this.getLabel(
-        key
-      )} must be less than or equal to ${max}`;
-
-      return value > max ? message : null;
-    });
-    return this;
+    return this.#addValidatorFunction(
+      value => value <= max,
+      `must be less than or equal to ${max}`
+    );
   };
 
   email = () => {
-    this.validatorFunctions.push((value, key) => {
-      if (!value.includes("@")) {
-        const message = `"${this.getLabel(key)}" is not a valid email address`;
-        return message;
-      }
-      return null;
-    });
-    return this;
+    return this.#addValidatorFunction(
+      value => value.includes("@"),
+      `is not a valid email address`
+    );
   };
 
   integer = () => {
-    this.validatorFunctions.push((value, key) => {
-      const message = `${this.getLabel(key)} must be an integer`;
+    return this.#addValidatorFunction(value => {
+      // parseInt returns also a number on floats, so if we check if it is equal to the result
+      // of parseFloat we can see if the the input was initially a float (invalid) or not
       const int = parseInt(value);
       const float = parseFloat(value);
-
-      // parseInt also works with floats, if we compare it to the float we can see if the value initially was a float or not
-      return !int || int !== float ? message : null;
-    });
-    return this;
+      return int !== NaN && int === float;
+    }, `must be an integer`);
   };
 
   number = () => {
-    this.validatorFunctions.push((value, key) => {
-      const message = `${this.getLabel(key)} must be a number`;
-      const float = parseFloat(value);
-
-      // parseInt also works with floats, if we compare it to the float we can see if the value initially was a float or not
-      return !float ? message : null;
-    });
-    console.log(this.validatorFunctions);
-    return this;
+    return this.#addValidatorFunction(
+      value => parseFloat(value) !== NaN, // truthy if value is convertible to float (which include all numbers including integers)
+      `must be a number`
+    );
   };
 
   /**
