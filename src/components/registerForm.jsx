@@ -1,27 +1,31 @@
-import React from "react";
-import Joi from "joi-browser";
-import Form from "./form";
+import React, { Component } from "react";
 import Validator from "../modules/validator";
+import Form from "./form";
 
-class LoginForm extends Form {
+class RegisterForm extends Form {
   constructor() {
     super();
     const obj = {
       data: {
         username: "",
         password: "",
+        name: "",
       },
     };
-    // add this, do not override properties of base class
+    // add this, do not override properties of Form
     Object.assign(this.state, obj);
   }
 
-  title = "Login Form";
-  buttonLabel = "Login";
+  title = "Register Form";
+  buttonLabel = "Register";
 
   schema = {
-    username: new Validator().notEmpty().setLabel("Username"),
-    password: new Validator().notEmpty().setLabel("Password"),
+    username: new Validator().notEmpty().email().setLabel("Username"),
+    password: new Validator()
+      .notEmpty()
+      .minMaxLength(3, 5)
+      .setLabel("Password"),
+    name: new Validator().notEmpty().setLabel("Name"),
   };
 
   handleSubmit = () => {
@@ -42,9 +46,13 @@ class LoginForm extends Form {
           label: "Password",
           type: "password",
         })}
+        {this.renderInput({
+          name: "name",
+          label: "Name",
+        })}
       </React.Fragment>
     );
   };
 }
 
-export default LoginForm;
+export default RegisterForm;

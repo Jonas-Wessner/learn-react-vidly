@@ -72,6 +72,37 @@ class Validator {
     return this;
   };
 
+  minMaxLength = (min, max) => {
+    this.validatorFunctions.push((value, key) => {
+      let type = null;
+      if (value.length < min) {
+        type = 0;
+      } else if (value.length > max) {
+        type = 1;
+      }
+
+      if (type === null) return null; // no errors
+
+      const message = `${this.#label || key} must have a ${
+        type === 0 ? "minimum" : "maximum"
+      } length of ${type === 0 ? min : max} characters`;
+
+      return message;
+    });
+    return this;
+  };
+
+  email = () => {
+    this.validatorFunctions.push((value, key) => {
+      if (!value.includes("@")) {
+        const message = `${this.#label || key} is not a valid email address`;
+        return message;
+      }
+      return null;
+    });
+    return this;
+  };
+
   /**
    * sets the label in the error messages
    * @param {} label
