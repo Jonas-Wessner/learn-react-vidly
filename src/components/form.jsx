@@ -12,10 +12,8 @@ class Form extends Component {
 
   validate = () => {
     const options = { abortEarly: false }; // do not stop after first error
-    console.log("2:", this.state.data, this.schema);
     const errors = Validator.validate(this.state.data, this.schema, options);
 
-    console.log("3:", errors);
     return errors;
   };
 
@@ -33,7 +31,6 @@ class Form extends Component {
       errors[name] = newErrors[name];
     }
 
-    console.log("4:", this.state.data, schema, name, value, errors);
     return errors;
   };
 

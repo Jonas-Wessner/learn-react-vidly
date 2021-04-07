@@ -1,6 +1,6 @@
 class Validator {
   validatorFunctions = [];
-  label = null;
+  #label = null;
   // example:
   // errors = {
   //   username: ["Username cannot be empty"],
@@ -22,15 +22,12 @@ class Validator {
   //   email: "1234.de",
   // };
 
-  // TODO: every validate function in the Validator-object that is a value in the schema must be called once
-  // for every corresponding value in the toValidate-object
-  // TODO: if the toValidate-object does not have all keys that the schema has we want to throw an error
-
   static validate = (toValidate, schema, options) => {
+    this.#validateInput(toValidate, schema);
     const errors = {};
 
     for (const key in schema) {
-      if (!Object.hasOwnProperty.call(schema, key)) continue; // if the property is inherited
+      if (!schema.hasOwnProperty(key)) continue; // if the property is inherited
 
       console.log("1:", schema, key);
 
@@ -48,10 +45,21 @@ class Validator {
     return errors;
   };
 
+  static #validateInput = (toValidate, schema) => {
+    console.log(schema, toValidate);
+    Object.keys(schema).forEach(key => {
+      if (!toValidate.hasOwnProperty(key)) {
+        const message = `All keys in the 'schema' must be present in the object 'toValidate'. Could not find property '${key}' in 'toValidate'`;
+        throw new TypeError(message);
+      }
+    });
+    return true;
+  };
+
   // returns an error message or null
   notEmpty = () => {
     this.validatorFunctions.push((toValidate, key) => {
-      const message = `${this.label || key} is not allowed to be empty`;
+      const message = `${this.#label || key} is not allowed to be empty`;
       if (!toValidate[key] || toValidate[key] === "") {
         return message;
       }
@@ -61,7 +69,7 @@ class Validator {
   };
 
   setLabel = str => {
-    this.label = str;
+    this.#label = str;
     return this;
   };
 }
