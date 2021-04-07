@@ -29,6 +29,7 @@ class Validator {
       }
     }
 
+    console.log(errors);
     return errors;
   };
 
@@ -72,22 +73,25 @@ class Validator {
     return this;
   };
 
-  minMaxLength = (min, max) => {
+  minLength = min => {
     this.validatorFunctions.push((value, key) => {
-      let type = null;
-      if (value.length < min) {
-        type = 0;
-      } else if (value.length > max) {
-        type = 1;
-      }
+      const message = `${
+        this.#label || key
+      } must have a minimum length of ${min} characters`;
 
-      if (type === null) return null; // no errors
+      console.log(value, min);
+      return value.length < min ? message : null;
+    });
+    return this;
+  };
 
-      const message = `${this.#label || key} must have a ${
-        type === 0 ? "minimum" : "maximum"
-      } length of ${type === 0 ? min : max} characters`;
+  maxLength = max => {
+    this.validatorFunctions.push((value, key) => {
+      const message = `${
+        this.#label || key
+      } must have a maximum length of ${max} characters`;
 
-      return message;
+      return value.length > max ? message : null;
     });
     return this;
   };

@@ -23,7 +23,8 @@ class RegisterForm extends Form {
     username: new Validator().notEmpty().email().setLabel("Username"),
     password: new Validator()
       .notEmpty()
-      .minMaxLength(3, 5)
+      .minLength(6)
+      .maxLength(16)
       .setLabel("Password"),
     name: new Validator().notEmpty().setLabel("Name"),
   };
