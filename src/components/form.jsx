@@ -13,7 +13,6 @@ class Form extends Component {
   validate = () => {
     const options = { abortEarly: false }; // do not stop after first error
     const errors = Validator.validate(this.state.data, this.schema, options);
-
     return errors;
   };
 
@@ -60,7 +59,6 @@ class Form extends Component {
   };
 
   handleChange = ({ currentTarget: input }) => {
-    console.log("6:", input);
     const errors = this.validateProperty(input);
 
     const data = { ...this.state.data };
