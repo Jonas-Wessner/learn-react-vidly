@@ -10,6 +10,7 @@ class LoginForm extends Form {
   };
 
   title = "Login Form";
+  buttonLabel = "Login";
 
   schema = {
     username: new Validator().notEmpty().setLabel("Username"),
