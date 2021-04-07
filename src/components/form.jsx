@@ -1,7 +1,8 @@
 import React, { Component } from "react";
 import Joi from "joi-browser";
 import Input from "./input";
-import { empty } from "./common/utils";
+import { empty } from "../modules/utils";
+import Validator from "./../modules/validator";
 
 class Form extends Component {
   state = { data: {}, errors: {} };
@@ -11,14 +12,10 @@ class Form extends Component {
 
   validate = () => {
     const options = { abortEarly: false }; // do not stop after first error
-    const { error } = Joi.validate(this.state.data, this.schema, options);
-    const errors = {};
+    console.log("2:", this.state.data, this.schema);
+    const errors = Validator.validate(this.state.data, this.schema, options);
 
-    if (!error) return errors; // cannot iterate over null or undefined, which is the case when we have no errors
-
-    for (let item of error.details) {
-      errors[item.path[0]] = item.message; // break down complex error object into simpler custom error object
-    }
+    console.log("3:", errors);
     return errors;
   };
 
@@ -26,16 +23,17 @@ class Form extends Component {
   validateProperty = ({ name, value }) => {
     const toValidate = { [name]: value };
     const schema = { [name]: this.schema[name] };
-    const { error } = Joi.validate(toValidate, schema);
+    const newErrors = Validator.validate(toValidate, schema); // only the errors of one property
 
     const errors = { ...this.state.errors };
 
-    if (error) {
-      errors[name] = error.details[0].message; // set error if present
-    } else {
+    if (empty(newErrors)) {
       delete errors[name]; // clear error if not present
+    } else {
+      errors[name] = newErrors[name];
     }
 
+    console.log("4:", this.state.data, schema, name, value, errors);
     return errors;
   };
 
@@ -65,6 +63,7 @@ class Form extends Component {
   };
 
   handleChange = ({ currentTarget: input }) => {
+    console.log("6:", input);
     const errors = this.validateProperty(input);
 
     const data = { ...this.state.data };

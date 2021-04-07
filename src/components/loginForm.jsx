@@ -1,6 +1,7 @@
 import React from "react";
 import Joi from "joi-browser";
 import Form from "./form";
+import Validator from "../modules/validator";
 
 class LoginForm extends Form {
   state = {
@@ -11,8 +12,8 @@ class LoginForm extends Form {
   title = "Login Form";
 
   schema = {
-    username: Joi.string().required().label("Username"),
-    password: Joi.string().required().label("Password"),
+    username: new Validator().notEmpty().setLabel("Username"),
+    password: new Validator().notEmpty().setLabel("Password"),
   };
 
   handleSubmit = () => {
