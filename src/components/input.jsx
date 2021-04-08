@@ -1,22 +1,32 @@
 import React, { Component } from "react";
 import PropTypes from "prop-types";
+import GenericInput from "./genericInput";
 
 // ...rest is used to pass any further arguments down by exactly their name.
-class Input extends Component {
-  renderErrors = () => {
+class Input extends GenericInput {
+  renderContent = () => {
+    const { name, type = "text", ...rest } = this.props;
     return (
-      <div className="alert alert-danger">
-        {this.props.errors.map((message, index) => (
-          <div key={message + index} style={{ display: "block" }}>
-            {message}
-          </div>
-        ))}
-      </div>
+      <input
+        id={name}
+        name={name}
+        type={type}
+        className="form-control"
+        {...rest}
+      />
     );
   };
 
   render() {
-    const { name, label, errors, type = "text", ...rest } = this.props;
+    const {
+      name,
+      label,
+      errors,
+      onChange,
+      type = "text",
+      ...rest
+    } = this.props;
+
     return (
       <div className="form-group">
         <label htmlFor={name}>{label}</label>
@@ -24,6 +34,7 @@ class Input extends Component {
           id={name}
           name={name}
           type={type}
+          onChange={onChange}
           className="form-control"
           {...rest}
         />
@@ -36,10 +47,8 @@ class Input extends Component {
 
 Input.propTypes = {
   name: PropTypes.string.isRequired,
-  label: PropTypes.string.isRequired,
-  value: PropTypes.string.isRequired,
+  type: PropTypes.string,
   onChange: PropTypes.func.isRequired,
-  autoFocus: PropTypes.bool,
 };
 
 export default Input;

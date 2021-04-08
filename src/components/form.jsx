@@ -2,6 +2,7 @@ import React, { Component } from "react";
 import Input from "./input";
 import { empty } from "../modules/utils";
 import Validator from "./../modules/validator";
+import Select from "./select";
 
 class Form extends Component {
   state = { data: {}, errors: {} };
@@ -75,6 +76,21 @@ class Form extends Component {
         value={data[name]}
         onChange={this.handleChange}
         errors={errors[name]}
+        {...rest}
+      />
+    );
+  };
+
+  renderSelect = ({ name, label, options, ...rest }) => {
+    const { data, errors } = this.state;
+    return (
+      <Select
+        name={name}
+        label={label}
+        value={data[name]}
+        onChange={this.handleChange}
+        errors={errors[name]}
+        options={options}
         {...rest}
       />
     );

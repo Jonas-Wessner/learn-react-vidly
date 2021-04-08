@@ -1,5 +1,6 @@
 import React from "react";
 import Validator from "../modules/validator";
+import { getGenres } from "../services/fakeGenreService";
 import Form from "./form";
 
 class MovieForm extends Form {
@@ -8,10 +9,11 @@ class MovieForm extends Form {
     const obj = {
       data: {
         title: "",
-        genre: "",
+        genreId: "",
         numberInStock: "",
         rate: "",
       },
+      genres: [],
     };
     // add this, do not override properties of Form
     Object.assign(this.state, obj);
@@ -22,7 +24,7 @@ class MovieForm extends Form {
 
   schema = {
     title: new Validator().notEmpty().setLabel("Title"),
-    genre: new Validator().notEmpty().setLabel("Genre"),
+    genreId: new Validator().notEmpty().integer().setLabel("Genre"),
     numberInStock: new Validator()
       .notEmpty()
       .integer()
@@ -35,6 +37,10 @@ class MovieForm extends Form {
       .minValue(0)
       .maxValue(10)
       .setLabel("Rate"),
+  };
+
+  componentDidMount = () => {
+    this.setState({ genres: getGenres() });
   };
 
   handleSubmit = () => {
@@ -51,9 +57,10 @@ class MovieForm extends Form {
           label: "Title",
           autoFocus: true,
         })}
-        {this.renderInput({
-          name: "genre",
+        {this.renderSelect({
+          name: "genreId",
           label: "Genre",
+          options: this.state.genres,
         })}
         {this.renderInput({
           name: "numberInStock",
