@@ -51,16 +51,19 @@ class MoviesTable extends Component {
     } = this.props;
 
     return (
-      <Table
-        className="movies-table"
-        columns={this.columns}
-        sortColumn={sortColumn}
-        data={paginatedMovies}
-        onSort={onSort}
-        itemName="movies"
-        totalItemsSize={totalSize}
-        displayedItemsSize={filteredSize}
-      />
+      <div>
+        <button className="btn btn-primary mb-3">New</button>
+        <Table
+          className="movies-table"
+          columns={this.columns}
+          sortColumn={sortColumn}
+          data={paginatedMovies}
+          onSort={onSort}
+          itemName="movies"
+          totalItemsSize={totalSize}
+          displayedItemsSize={filteredSize}
+        />
+      </div>
     );
   }
 }

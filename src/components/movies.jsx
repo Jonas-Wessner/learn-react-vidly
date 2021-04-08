@@ -118,10 +118,19 @@ class Movies extends Component {
 
     return (
       <div className="movies">
-        <GenrePicker
-          selectedGenreId={currentGenreId}
-          onStateChanged={this.handleGenreChanged}
-        />
+        <div>
+          <GenrePicker
+            selectedGenreId={currentGenreId}
+            onStateChanged={this.handleGenreChanged}
+          />
+          <Pagination
+            className="mt-3 mx-1"
+            itemCount={filteredSize}
+            pageSize={pageSize}
+            currentPageIndex={currentPageIndex}
+            onStateChanged={this.handlePageChanged}
+          />
+        </div>
         <MoviesTable
           totalSize={allMovies.length}
           filteredSize={filteredSize}
@@ -130,12 +139,6 @@ class Movies extends Component {
           onSort={this.handleSort}
           onLikeToggle={this.handleLikeToggle}
           onDelete={this.handleDelete}
-        />
-        <Pagination
-          itemCount={filteredSize}
-          pageSize={pageSize}
-          currentPageIndex={currentPageIndex}
-          onStateChanged={this.handlePageChanged}
         />
       </div>
     );

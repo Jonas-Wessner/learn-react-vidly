@@ -27,11 +27,13 @@ class Pagination extends Component {
   };
 
   render() {
+    const { className } = this.props;
     // return empty div instead of null in order to be still acquire the same space like before,
     // when this will suddenly not be rendered at runtime due to a change of page sizes => to not break layout
     if (this.pages <= 1) return <div />;
     return (
-      <nav>
+      // don't pass everything with the rest-operator, because unnecessary and produces warnings
+      <nav className={className}>
         <ul className="pagination">{this.generateLinks()}</ul>
       </nav>
     );
