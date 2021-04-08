@@ -10,6 +10,7 @@ class MovieForm extends Form {
     super();
     const obj = {
       data: {
+        _id: "",
         title: "",
         genreId: "",
         numberInStock: "",
@@ -59,6 +60,7 @@ class MovieForm extends Form {
 
   mapToViewModel = dbMovie => {
     return {
+      _id: dbMovie._id,
       title: dbMovie.title,
       genreId: dbMovie.genre._id,
       numberInStock: dbMovie.numberInStock,
