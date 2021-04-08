@@ -1,5 +1,4 @@
 import React, { Component } from "react";
-import Joi from "joi-browser";
 import Input from "./input";
 import { empty } from "../modules/utils";
 import Validator from "./../modules/validator";

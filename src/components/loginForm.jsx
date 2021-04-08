@@ -1,5 +1,4 @@
 import React from "react";
-import Joi from "joi-browser";
 import Form from "./form";
 import Validator from "../modules/validator";
 

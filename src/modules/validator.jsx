@@ -140,13 +140,13 @@ class Validator {
       // of parseFloat we can see if the the input was initially a float (invalid) or not
       const int = parseInt(value);
       const float = parseFloat(value);
-      return int !== NaN && int === float;
+      return !Number.isNaN(int) && int === float;
     }, `must be an integer`);
   };
 
   number = () => {
     return this.#addValidatorFunction(
-      value => parseFloat(value) !== NaN, // truthy if value is convertible to float (which include all numbers including integers)
+      value => !Number.isNaN(parseFloat(value)), // truthy if value is convertible to float (which include all numbers including integers)
       `must be a number`
     );
   };

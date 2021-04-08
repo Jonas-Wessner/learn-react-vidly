@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React from "react";
 import Validator from "../modules/validator";
 import Form from "./form";
 
