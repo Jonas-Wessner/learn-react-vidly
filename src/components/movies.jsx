@@ -10,14 +10,17 @@ class Movies extends Component {
     pageSize: 3,
     currentPageIndex: 0,
     currentGenreId: null,
-    movies: undefined,
+    movies: [],
     sortColumn: { path: "title", order: "asc" },
   };
 
   constructor() {
     super();
-    this.state.movies = getMovies();
   }
+
+  componentDidMount = () => {
+    this.setState({ movies: getMovies() });
+  };
 
   handleDelete = id => {
     const movies = this.state.movies.filter(mov => mov._id !== id); // changes in memory for user experience
