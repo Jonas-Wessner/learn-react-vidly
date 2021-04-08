@@ -13,7 +13,7 @@ class MovieForm extends Form {
         title: "",
         genreId: "",
         numberInStock: "",
-        rate: "",
+        dailyRentalRate: "",
       },
       genres: [],
     };
@@ -33,7 +33,7 @@ class MovieForm extends Form {
       .minValue(0)
       .maxValue(100)
       .setLabel("Number In Stock"),
-    rate: new Validator()
+    dailyRentalRate: new Validator()
       .notEmpty()
       .number()
       .minValue(0)
@@ -62,7 +62,7 @@ class MovieForm extends Form {
       title: dbMovie.title,
       genreId: dbMovie.genre._id,
       numberInStock: dbMovie.numberInStock,
-      rate: dbMovie.dailyRentalRate,
+      dailyRentalRate: dbMovie.dailyRentalRate,
     };
   };
 
@@ -90,7 +90,7 @@ class MovieForm extends Form {
           label: "Number In Stock",
         })}
         {this.renderInput({
-          name: "rate",
+          name: "dailyRentalRate",
           label: "Rate",
         })}
       </React.Fragment>
