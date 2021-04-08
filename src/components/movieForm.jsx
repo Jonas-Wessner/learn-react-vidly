@@ -1,7 +1,9 @@
 import React from "react";
 import Validator from "../modules/validator";
 import { getGenres } from "../services/fakeGenreService";
+import { getMovie } from "../services/fakeMovieService";
 import Form from "./form";
+import { empty } from "../modules/utils";
 
 class MovieForm extends Form {
   constructor() {
@@ -41,6 +43,27 @@ class MovieForm extends Form {
 
   componentDidMount = () => {
     this.setState({ genres: getGenres() });
+
+    const id = this.props.match.params.id;
+    if (id === "new") return; // no fields to fill with initial data
+
+    const movie = getMovie(this.props.match.params.id);
+
+    if (empty(movie)) {
+      this.props.history.replace("/not-found");
+      return; // stop execution of method after redirection
+    }
+
+    this.setState({ data: this.mapToViewModel(movie) });
+  };
+
+  mapToViewModel = dbMovie => {
+    return {
+      title: dbMovie.title,
+      genreId: dbMovie.genre._id,
+      numberInStock: dbMovie.numberInStock,
+      rate: dbMovie.dailyRentalRate,
+    };
   };
 
   handleSubmit = () => {
