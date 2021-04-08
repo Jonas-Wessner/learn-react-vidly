@@ -1,4 +1,6 @@
 export function empty(obj) {
+  if (obj === null || obj === undefined) return true;
+
   if (Array.isArray(obj)) {
     return obj.length === 0;
   }

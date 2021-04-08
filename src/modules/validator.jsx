@@ -8,10 +8,10 @@ class Validator {
    *
    * @param {} toValidate object to be validated
    * @param {*} schema object with keys: all properties to be validated values: ValidatorObject specifying the validation
-   * @param {*} options
+   * @param {*} options {abort: <"first", "<n>eachProp", "never"(default)>}
    * @returns error object: {property1: ["error message 1", "error message 2"], property2: ["error message 3"]...}
    */
-  static validate = (toValidate, schema, options) => {
+  static validate = (toValidate, schema, options = {}) => {
     this.#validateInput(toValidate, schema);
     const errors = {};
 
@@ -21,23 +21,30 @@ class Validator {
       const messages = this.#validateProperty(
         toValidate[key],
         key,
-        schema[key].validatorFunctions
+        schema[key].validatorFunctions,
+        options
       );
+
+      if (options.abort === "first" && !empty(messages)) {
+        // leave with only one message if options specify this
+        errors[key] = [messages[0]];
+        break;
+      }
 
       if (messages) {
         errors[key] = messages;
       }
     }
 
-    console.log(errors);
     return errors;
   };
 
   // returns an array of error messages or null if no errors occurred
-  static #validateProperty = (value, key, validatorFunctions) => {
+  static #validateProperty = (value, key, validatorFunctions, options) => {
     const messages = [];
 
     validatorFunctions.forEach(currFunc => {
+      if (options.abort === messages.length + "eachProp") return; // leave if the amount of errors defined in options is reached
       const message = currFunc(value, key);
 
       if (message) {

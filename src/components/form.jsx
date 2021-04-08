@@ -11,7 +11,7 @@ class Form extends Component {
   buttonLabel = "Submit";
 
   validate = () => {
-    const options = { abortEarly: false }; // do not stop after first error
+    const options = { abort: "1eachProp" }; // do not stop after first error
     const errors = Validator.validate(this.state.data, this.schema, options);
     return errors;
   };
@@ -20,7 +20,8 @@ class Form extends Component {
   validateProperty = ({ name, value }) => {
     const toValidate = { [name]: value };
     const schema = { [name]: this.schema[name] };
-    const newErrors = Validator.validate(toValidate, schema); // only the errors of one property
+    const options = { abort: "first" };
+    const newErrors = Validator.validate(toValidate, schema, options); // only the errors of one property
 
     const errors = { ...this.state.errors };
 
