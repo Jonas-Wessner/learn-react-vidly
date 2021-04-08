@@ -139,6 +139,7 @@ class Movies extends Component {
           onSort={this.handleSort}
           onLikeToggle={this.handleLikeToggle}
           onDelete={this.handleDelete}
+          history={this.props.history}
         />
       </div>
     );

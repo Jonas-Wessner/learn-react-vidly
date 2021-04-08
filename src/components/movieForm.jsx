@@ -40,6 +40,7 @@ class MovieForm extends Form {
   handleSubmit = () => {
     // Call Server and redirect user
     console.log("Submitted");
+    this.props.history.goBack();
   };
 
   renderContent = () => {

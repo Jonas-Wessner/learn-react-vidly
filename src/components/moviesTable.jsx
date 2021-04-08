@@ -41,6 +41,10 @@ class MoviesTable extends Component {
     },
   ];
 
+  handleNew = () => {
+    this.props.history.push("movies/new");
+  };
+
   render() {
     const {
       totalSize,
@@ -52,7 +56,9 @@ class MoviesTable extends Component {
 
     return (
       <div>
-        <button className="btn btn-primary mb-3">New</button>
+        <button onClick={this.handleNew} className="btn btn-primary mb-3">
+          New
+        </button>
         <Table
           className="movies-table"
           columns={this.columns}
