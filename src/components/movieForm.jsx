@@ -1,7 +1,7 @@
 import React from "react";
 import Validator from "../modules/validator";
 import { getGenres } from "../services/fakeGenreService";
-import { getMovie } from "../services/fakeMovieService";
+import { getMovie, saveMovie } from "../services/fakeMovieService";
 import Form from "./form";
 import { empty } from "../modules/utils";
 
@@ -67,7 +67,7 @@ class MovieForm extends Form {
   };
 
   handleSubmit = () => {
-    // Call Server and redirect user
+    saveMovie(this.state.data);
     console.log("Submitted");
     this.props.history.goBack();
   };

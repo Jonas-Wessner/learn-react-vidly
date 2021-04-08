@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { getMovies } from "../services/fakeMovieService";
+import { deleteMovie, getMovies } from "../services/fakeMovieService";
 import GenrePicker from "./genrePicker";
 import MoviesTable from "./moviesTable";
 import Pagination from "./pagination";
@@ -20,11 +20,12 @@ class Movies extends Component {
   }
 
   handleDelete = id => {
-    const movies = this.state.movies.filter(mov => mov._id !== id);
+    const movies = this.state.movies.filter(mov => mov._id !== id); // changes in memory for user experience
     this.setState({
       movies: movies,
       currentPageIndex: this.getValidCurrentPageIndex(movies),
     });
+    deleteMovie(id); // changes in DB for durability
   };
 
   handleLikeToggle = (movie, isEnabled) => {
