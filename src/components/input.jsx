@@ -17,33 +17,6 @@ class Input extends GenericInput {
       />
     );
   };
-
-  render() {
-    const {
-      name,
-      label,
-      errors,
-      onChange,
-      type = "text",
-      ...rest
-    } = this.props;
-
-    return (
-      <div className="form-group">
-        <label htmlFor={name}>{label}</label>
-        <input
-          id={name}
-          name={name}
-          type={type}
-          onChange={onChange}
-          className="form-control"
-          {...rest}
-        />
-        {/* only display when error is truthy */}
-        {errors && this.renderErrors()}
-      </div>
-    );
-  }
 }
 
 Input.propTypes = {
