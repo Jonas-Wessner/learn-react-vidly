@@ -8,7 +8,7 @@ class SearchBar extends Component {
       <div className={className + " input-group"} {...rest}>
         <div className="form-outline">
           <input
-            onChange={onChange}
+            onChange={e => onChange(e.target.value)} // only pass the new searchString value to the handler function for simplicity
             type="search"
             value={value}
             placeholder="search..."

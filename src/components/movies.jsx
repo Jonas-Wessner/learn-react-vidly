@@ -59,11 +59,10 @@ class Movies extends Component {
     this.setState({ sortColumn });
   };
 
-  handleSearch = ({ target: input }) => {
-    // also clear genre if we search something
+  handleSearch = searchString => {
     const newState = {
-      searchString: input.value,
-      currentGenreId: null,
+      searchString: searchString,
+      currentGenreId: null, // also clear genre if we search something
       currentPageIndex: 0,
     };
     this.setState(newState);
