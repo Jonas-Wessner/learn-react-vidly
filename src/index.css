@@ -66,3 +66,14 @@ code {
   width: 100px;
   overflow: hidden;
 }
+
+#movie-table__header {
+  display: flex;
+  justify-content: space-around;
+  padding: 0 2rem 0 0;
+}
+
+#movie-table__header > * {
+  display: inline-block;
+  margin: 0 2rem 0 0;
+}

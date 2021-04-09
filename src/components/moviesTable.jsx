@@ -3,6 +3,7 @@ import { Link } from "react-router-dom";
 import Like from "./like";
 import PropTypes from "prop-types";
 import Table from "./common/table";
+import SearchBar from "./searchBar";
 
 class MoviesTable extends Component {
   // path is the path to the property displayed, name is the name displayed in the table-header
@@ -52,13 +53,26 @@ class MoviesTable extends Component {
       paginatedMovies,
       sortColumn,
       onSort,
+      onSearch,
+      searchString,
     } = this.props;
 
     return (
       <div>
-        <button onClick={this.handleNew} className="btn btn-primary mb-3">
-          New
-        </button>
+        <div id="movie-table__header">
+          <button
+            onClick={this.handleNew}
+            className="btn btn-primary mb-3"
+            id="movies-table__new"
+          >
+            New
+          </button>
+          <SearchBar
+            id="movies-table__search"
+            onChange={onSearch}
+            value={searchString}
+          />
+        </div>
         <Table
           className="movies-table"
           columns={this.columns}

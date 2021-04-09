@@ -10,6 +10,7 @@ class Movies extends Component {
     pageSize: 3,
     currentPageIndex: 0,
     currentGenreId: null,
+    searchString: "",
     movies: [],
     sortColumn: { path: "title", order: "asc" },
   };
@@ -46,20 +47,32 @@ class Movies extends Component {
   };
 
   handleGenreChanged = genre => {
-    this.setState({
+    const newState = {
       currentGenreId: genre._id,
       currentPageIndex: 0, // start looking at new genre from first page
-    });
+      searchString: "", // also clear search if we filter for genre
+    };
+    this.setState(newState);
   };
 
   handleSort = sortColumn => {
     this.setState({ sortColumn });
   };
 
+  handleSearch = ({ target: input }) => {
+    // also clear genre if we search something
+    const newState = { searchString: input.value, currentGenreId: null };
+
+    this.setState(newState);
+  };
+
   // defines how filtering is performed
   matchesFilter = movie => {
-    const { currentGenreId } = this.state;
-    return currentGenreId === null || movie.genre._id === currentGenreId;
+    const { currentGenreId, searchString } = this.state;
+    return (
+      (currentGenreId === null || movie.genre._id === currentGenreId) &&
+      movie.title.toLocaleLowerCase().includes(searchString.toLocaleLowerCase())
+    );
   };
 
   getValidCurrentPageIndex = movies => {
@@ -116,6 +129,7 @@ class Movies extends Component {
       currentGenreId,
       currentPageIndex,
       sortColumn,
+      searchString,
     } = this.state;
 
     const { filteredSize, movies } = this.getRenderedData();
@@ -144,6 +158,8 @@ class Movies extends Component {
           onLikeToggle={this.handleLikeToggle}
           onDelete={this.handleDelete}
           history={this.props.history}
+          onSearch={this.handleSearch}
+          searchString={searchString}
         />
       </div>
     );
