@@ -2,7 +2,7 @@ import React, { Component } from "react";
 
 class SearchBar extends Component {
   render() {
-    const { className, onChange, value, ...rest } = this.props;
+    const { className, onChange, value, autoFocus, ...rest } = this.props;
 
     return (
       <div className={className + " input-group"} {...rest}>
@@ -13,6 +13,7 @@ class SearchBar extends Component {
             value={value}
             placeholder="search..."
             className="form-control"
+            autoFocus={autoFocus}
           />
         </div>
       </div>

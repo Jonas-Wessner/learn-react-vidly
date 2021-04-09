@@ -71,6 +71,7 @@ class MoviesTable extends Component {
             id="movies-table__search"
             onChange={onSearch}
             value={searchString}
+            autoFocus={true}
           />
         </div>
         <Table
