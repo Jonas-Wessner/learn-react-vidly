@@ -12,7 +12,10 @@ class Movies extends Component {
     currentGenreId: null,
     searchString: "",
     movies: [],
-    sortColumn: { path: "title", order: "asc" },
+    sortColumn: {
+      path: "title",
+      order: "asc",
+    },
   };
 
   constructor() {
@@ -23,8 +26,8 @@ class Movies extends Component {
     this.setState({ movies: getMovies() });
   };
 
-  handleDelete = id => {
-    const movies = this.state.movies.filter(mov => mov._id !== id); // changes in memory for user experience
+  handleDelete = (id) => {
+    const movies = this.state.movies.filter((mov) => mov._id !== id); // changes in memory for user experience
     this.setState({
       movies: movies,
       currentPageIndex: this.getValidCurrentPageIndex(movies),
@@ -40,13 +43,13 @@ class Movies extends Component {
     this.setState({ movies });
   };
 
-  handlePageChanged = index => {
+  handlePageChanged = (index) => {
     this.setState({
       currentPageIndex: index,
     });
   };
 
-  handleGenreChanged = genre => {
+  handleGenreChanged = (genre) => {
     const newState = {
       currentGenreId: genre._id,
       currentPageIndex: 0, // start looking at new genre from first page
@@ -55,11 +58,11 @@ class Movies extends Component {
     this.setState(newState);
   };
 
-  handleSort = sortColumn => {
+  handleSort = (sortColumn) => {
     this.setState({ sortColumn });
   };
 
-  handleSearch = searchString => {
+  handleSearch = (searchString) => {
     const newState = {
       searchString: searchString,
       currentGenreId: null, // also clear genre if we search something
@@ -69,7 +72,7 @@ class Movies extends Component {
   };
 
   // defines how filtering is performed
-  matchesFilter = movie => {
+  matchesFilter = (movie) => {
     const { currentGenreId, searchString } = this.state;
     return (
       (currentGenreId === null || movie.genre._id === currentGenreId) &&
@@ -77,7 +80,7 @@ class Movies extends Component {
     );
   };
 
-  getValidCurrentPageIndex = movies => {
+  getValidCurrentPageIndex = (movies) => {
     const itemsCount = movies.reduce(
       (acc, movie) => acc + this.matchesFilter(movie),
       0
@@ -98,7 +101,7 @@ class Movies extends Component {
     return this.state.movies.filter((movie, i) => this.matchesFilter(movie));
   };
 
-  getPaginatedMovies = movies => {
+  getPaginatedMovies = (movies) => {
     const { pageSize, currentPageIndex } = this.state;
     return movies.filter(
       (m, index) => Math.floor(index / pageSize) === currentPageIndex
