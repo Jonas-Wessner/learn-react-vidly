@@ -5,12 +5,20 @@ import GenericInput from "./genericInput";
 class Select extends GenericInput {
   renderContent = () => {
     // ...rest is used to pass any further arguments down by exactly their name.
-    const { name, options, onChange, type = "text", ...rest } = this.props;
+    const {
+      name,
+      options,
+      value,
+      onChange,
+      type = "text",
+      ...rest
+    } = this.props;
     return (
       <select
         id={name}
         name={name}
         type={type}
+        value={value}
         onChange={onChange}
         className="form-control"
         {...rest}
