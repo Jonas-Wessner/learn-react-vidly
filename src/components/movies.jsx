@@ -61,8 +61,11 @@ class Movies extends Component {
 
   handleSearch = ({ target: input }) => {
     // also clear genre if we search something
-    const newState = { searchString: input.value, currentGenreId: null };
-
+    const newState = {
+      searchString: input.value,
+      currentGenreId: null,
+      currentPageIndex: 0,
+    };
     this.setState(newState);
   };
 
