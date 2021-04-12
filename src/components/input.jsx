@@ -5,7 +5,14 @@ import GenericInput from "./genericInput";
 // ...rest is used to pass any further arguments down by exactly their name.
 class Input extends GenericInput {
   renderContent = () => {
-    const { name, value, type = "text", ...rest } = this.props;
+    const {
+      name,
+      value,
+      valueType,
+      onChange,
+      type = "text",
+      ...rest
+    } = this.props;
     return (
       <input
         id={name}
@@ -13,6 +20,7 @@ class Input extends GenericInput {
         type={type}
         className="form-control"
         value={value}
+        onChange={onChange}
         {...rest}
       />
     );

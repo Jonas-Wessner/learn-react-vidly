@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { deleteMovie, getMovies } from "../services/fakeMovieService";
+import { deleteMovie, getMovies } from "../services/movieService";
 import GenrePicker from "./genrePicker";
 import MoviesTable from "./moviesTable";
 import Pagination from "./pagination";
@@ -18,8 +18,8 @@ class Movies extends Component {
     },
   };
 
-  componentDidMount = () => {
-    this.setState({ movies: getMovies() });
+  componentDidMount = async () => {
+    this.setState({ movies: await getMovies() });
   };
 
   handleDelete = (id) => {

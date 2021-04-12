@@ -3,6 +3,7 @@ import Input from "./input";
 import { empty } from "../modules/utils";
 import Validator from "./../modules/validator";
 import Select from "./select";
+import { getCurrentHub } from "@sentry/react";
 
 class Form extends Component {
   state = { data: {}, errors: {} };
@@ -12,8 +13,7 @@ class Form extends Component {
 
   validate = () => {
     const options = { abort: "1eachProp" }; // do not stop after first error
-    const errors = Validator.validate(this.state.data, this.schema, options);
-    return errors;
+    return Validator.validate(this.state.data, this.schema, options);
   };
 
   // returns a new error object that results from this.state.errors with the given property updated
@@ -36,7 +36,7 @@ class Form extends Component {
 
   /* By default the submission of a form results in a full page reload.
     We do not want that and therefore override the default behavior */
-  submit = e => {
+  submit = (e) => {
     e.preventDefault();
 
     const errors = this.validate();
@@ -59,11 +59,13 @@ class Form extends Component {
     );
   };
 
-  handleChange = ({ currentTarget: input }) => {
+  handleChange = ({ currentTarget: input }, valueType) => {
+    console.log(input, valueType);
     const errors = this.validateProperty(input);
 
     const data = { ...this.state.data };
-    data[input.id] = input.value;
+    data[input.id] =
+      valueType === "number" ? input.value * 1 || input.value : input.value; // * 1 converts to a number
     this.setState({ data, errors });
   };
 

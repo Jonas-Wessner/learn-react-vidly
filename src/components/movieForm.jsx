@@ -1,9 +1,10 @@
 import React from "react";
 import Validator from "../modules/validator";
 import { getGenres } from "../services/genreService";
-import { getMovie, saveMovie } from "../services/fakeMovieService";
+import { getMovie, saveMovie } from "../services/movieService";
 import Form from "./form";
 import { empty } from "../modules/utils";
+import { toast } from "react-toastify";
 
 class MovieForm extends Form {
   constructor() {
@@ -12,8 +13,8 @@ class MovieForm extends Form {
       data: {
         _id: "",
         title: "",
-        genreId: "",
-        numberInStock: "",
+        genreId: null,
+        numberInStock: null,
         dailyRentalRate: "",
       },
       genres: [],
@@ -27,7 +28,7 @@ class MovieForm extends Form {
 
   schema = {
     title: new Validator().notEmpty().setLabel("Title"),
-    genreId: new Validator().notEmpty().integer().setLabel("Genre"),
+    genreId: new Validator().notEmpty().setLabel("Genre"),
     numberInStock: new Validator()
       .notEmpty()
       .integer()
@@ -48,7 +49,7 @@ class MovieForm extends Form {
     const id = this.props.match.params.id;
     if (id === "new") return; // no fields to fill with initial data
 
-    const movie = getMovie(this.props.match.params.id);
+    const movie = await getMovie(this.props.match.params.id);
 
     if (empty(movie)) {
       this.props.history.replace("/not-found");
@@ -69,8 +70,18 @@ class MovieForm extends Form {
   };
 
   handleSubmit = () => {
-    saveMovie(this.state.data);
-    console.log("Submitted");
+    // convert fields to type number, because backend expects that
+    const movie = { ...this.state.data };
+    movie.numberInStock = movie.numberInStock * 1;
+    movie.dailyRentalRate = movie.dailyRentalRate * 1;
+
+    saveMovie(movie).then((response) => {
+      if (response === null) {
+        toast.error("Movie could not be saved");
+      } else {
+        toast.success("Movie successfully saved");
+      }
+    });
     this.props.history.goBack();
   };
 
@@ -90,10 +101,12 @@ class MovieForm extends Form {
         {this.renderInput({
           name: "numberInStock",
           label: "Number In Stock",
+          valueType: "number",
         })}
         {this.renderInput({
           name: "dailyRentalRate",
           label: "Rate",
+          valueType: "number",
         })}
       </React.Fragment>
     );
