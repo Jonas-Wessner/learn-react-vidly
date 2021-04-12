@@ -4,6 +4,7 @@ import GenrePicker from "./genrePicker";
 import MoviesTable from "./moviesTable";
 import Pagination from "./pagination";
 import _ from "lodash";
+import { toast } from "react-toastify";
 
 class Movies extends Component {
   state = {
@@ -23,12 +24,21 @@ class Movies extends Component {
   };
 
   handleDelete = (id) => {
+    const prevMovies = [...this.state.movies];
     const movies = this.state.movies.filter((mov) => mov._id !== id); // changes in memory for user experience
     this.setState({
       movies: movies,
       currentPageIndex: this.getValidCurrentPageIndex(movies),
     });
-    deleteMovie(id); // changes in DB for durability
+    // save changes in DB
+    deleteMovie(id).then((response) => {
+      if (response === null) {
+        toast.error("Movie could not be deleted");
+        this.setState({ movies: prevMovies }); // revert UI if update did not succeed
+      } else {
+        toast.success("Movie successfully deleted");
+      }
+    });
   };
 
   handleLikeToggle = (movie, isEnabled) => {
