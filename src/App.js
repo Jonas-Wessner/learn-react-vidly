@@ -9,11 +9,14 @@ import MovieForm from "./components/movieForm";
 import NotFound from "./components/notFound";
 import LoginForm from "./components/loginForm";
 import RegisterForm from "./components/registerForm";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 class App extends Component {
   render = () => {
     return (
       <React.Fragment>
+        <ToastContainer />
         <NavBar />
         <div className="content">
           <Switch>

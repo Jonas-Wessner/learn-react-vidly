@@ -18,10 +18,6 @@ class Movies extends Component {
     },
   };
 
-  constructor() {
-    super();
-  }
-
   componentDidMount = () => {
     this.setState({ movies: getMovies() });
   };

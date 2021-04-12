@@ -1,6 +1,6 @@
 import React from "react";
 import Validator from "../modules/validator";
-import { getGenres } from "../services/fakeGenreService";
+import { getGenres } from "../services/genreService";
 import { getMovie, saveMovie } from "../services/fakeMovieService";
 import Form from "./form";
 import { empty } from "../modules/utils";
@@ -42,8 +42,8 @@ class MovieForm extends Form {
       .setLabel("Rate"),
   };
 
-  componentDidMount = () => {
-    this.setState({ genres: getGenres() });
+  componentDidMount = async () => {
+    this.setState({ genres: await getGenres() });
 
     const id = this.props.match.params.id;
     if (id === "new") return; // no fields to fill with initial data
@@ -58,7 +58,7 @@ class MovieForm extends Form {
     this.setState({ data: this.mapToViewModel(movie) });
   };
 
-  mapToViewModel = dbMovie => {
+  mapToViewModel = (dbMovie) => {
     return {
       _id: dbMovie._id,
       title: dbMovie.title,
