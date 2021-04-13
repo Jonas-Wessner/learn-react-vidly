@@ -27,7 +27,7 @@ class MovieForm extends Form {
   buttonLabel = "Save";
 
   schema = {
-    title: new Validator().notEmpty().setLabel("Title"),
+    title: new Validator().notEmpty().minLength(5).setLabel("Title"),
     genreId: new Validator().notEmpty().setLabel("Genre"),
     numberInStock: new Validator()
       .notEmpty()
@@ -49,7 +49,7 @@ class MovieForm extends Form {
     const id = this.props.match.params.id;
     if (id === "new") return; // no fields to fill with initial data
 
-    const movie = await getMovie(this.props.match.params.id);
+    const movie = this.props.movies.find((movie) => movie._id === id);
 
     if (empty(movie)) {
       this.props.history.replace("/not-found");
@@ -60,6 +60,7 @@ class MovieForm extends Form {
   };
 
   mapToViewModel = (dbMovie) => {
+    console.log("dbMovie: ", dbMovie);
     return {
       _id: dbMovie._id,
       title: dbMovie.title,
@@ -80,8 +81,10 @@ class MovieForm extends Form {
         toast.error("Movie could not be saved");
       } else {
         toast.success("Movie successfully saved");
+        this.props.onSave(response.data); // raise onSave-event when movie is saved in DB
       }
     });
+
     this.props.history.goBack();
   };
 

@@ -39,10 +39,32 @@ class Movies extends Component {
     this.setState({ movies });
   };
 
+  handleSave = (movie) => {
+    let movies = [...this.state.movies];
+    const index = movies.findIndex(({ _id }) => movie._id === _id);
+    if (index >= 0) {
+      // not need to clone the movie, because we are only modifying the pointer (reference)
+      // to a movie in a NEW array that is decoupled from the state
+      movies[index] = movie; // if movie exists, update it
+    } else {
+      movies.push(movie); // if movie does not exist, create new one
+    }
+    this.setState({ movies });
+  };
+
   render() {
     return (
       <Switch>
-        <Route path="/movies/:id" component={MovieForm} />
+        <Route
+          path="/movies/:id"
+          render={(props) => (
+            <MovieForm
+              movies={this.state.movies}
+              onSave={this.handleSave}
+              {...props}
+            />
+          )}
+        />
         <Route
           path="/movies"
           render={(props) => (
