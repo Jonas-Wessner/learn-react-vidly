@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import { deleteMovie, getMovies } from "../services/movieService";
-import { toast } from "react-toastify";
+import notice from "./notificationService";
 import MoviesPage from "./moviesPage";
 import { Route, Switch } from "react-router-dom";
 import MovieForm from "./movieForm";
@@ -23,10 +23,10 @@ class Movies extends Component {
     // save changes in DB
     deleteMovie(id).then((response) => {
       if (response === null) {
-        toast.error("Movie could not be deleted");
+        notice.error("Movie could not be deleted");
         this.setState({ movies: prevMovies }); // revert UI if update did not succeed
       } else {
-        toast.success("Movie successfully deleted");
+        notice.success("Movie successfully deleted");
       }
     });
   };

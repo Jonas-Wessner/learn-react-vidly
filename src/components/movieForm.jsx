@@ -1,10 +1,10 @@
 import React from "react";
 import Validator from "../modules/validator";
 import { getGenres } from "../services/genreService";
-import { getMovie, saveMovie } from "../services/movieService";
+import { saveMovie } from "../services/movieService";
 import Form from "./form";
 import { empty } from "../modules/utils";
-import { toast } from "react-toastify";
+import notice from "./notificationService";
 
 class MovieForm extends Form {
   constructor() {
@@ -78,9 +78,9 @@ class MovieForm extends Form {
 
     saveMovie(movie).then((response) => {
       if (response === null) {
-        toast.error("Movie could not be saved");
+        notice.error("Movie could not be saved");
       } else {
-        toast.success("Movie successfully saved");
+        notice.success("Movie successfully saved");
         this.props.onSave(response.data); // raise onSave-event when movie is saved in DB
       }
     });

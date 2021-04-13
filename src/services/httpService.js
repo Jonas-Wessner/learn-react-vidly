@@ -1,5 +1,5 @@
 import axios from "axios";
-import { toast } from "react-toastify";
+import notice from "../components/notificationService";
 
 axios.interceptors.response.use(null, (e) => {
   const expectedError =
@@ -7,7 +7,7 @@ axios.interceptors.response.use(null, (e) => {
 
   // handle unexpected error globally
   if (!expectedError) {
-    toast.error("Unexpected error occurred");
+    notice.error("Unexpected error occurred");
   }
 
   // pass control to catch block in code
