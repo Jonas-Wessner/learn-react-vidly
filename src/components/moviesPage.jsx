@@ -108,9 +108,9 @@ class MoviesPage extends Component {
   render() {
     const { pageSize, currentGenreId, sortColumn, searchString } = this.state;
 
-    const { onDelete, onLikeToggle, movies: allMovies } = this.props;
+    const { onDelete, onLikeToggle, movies: allMovies, history } = this.props;
 
-    const { filteredSize, movies, history } = this.getRenderedData();
+    const { filteredSize, movies } = this.getRenderedData();
 
     // set currentPageIndex to a valid Index (it might have been invalidated through deletes or updates in the movie component)
     const currentPageIndex = this.getValidCurrentPageIndex(

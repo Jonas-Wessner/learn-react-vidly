@@ -2,6 +2,8 @@ import React, { Component } from "react";
 import { deleteMovie, getMovies } from "../services/movieService";
 import { toast } from "react-toastify";
 import MoviesPage from "./moviesPage";
+import { Route, Switch } from "react-router-dom";
+import MovieForm from "./movieForm";
 
 class Movies extends Component {
   state = {
@@ -39,12 +41,20 @@ class Movies extends Component {
 
   render() {
     return (
-      <MoviesPage
-        movies={this.state.movies}
-        onDelete={this.handleDelete}
-        onLikeToggle={this.handleLikeToggle}
-        history={this.props.history}
-      />
+      <Switch>
+        <Route path="/movies/:id" component={MovieForm} />
+        <Route
+          path="/movies"
+          render={(props) => (
+            <MoviesPage
+              movies={this.state.movies}
+              onDelete={this.handleDelete}
+              onLikeToggle={this.handleLikeToggle}
+              {...props} // pass props that the Route-component wants to pass to it's children
+            />
+          )}
+        />
+      </Switch>
     );
   }
 }
