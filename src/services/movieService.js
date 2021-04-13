@@ -1,9 +1,9 @@
 import Http from "./httpService";
-import config from "../config.json";
+import { apiUrl } from "../config.json";
 import logger from "./logger";
 import notice from "../components/notificationService";
 
-const apiEndpoint = `${config.apiEndpoint}/movies`;
+const apiEndpoint = `${apiUrl}/movies`;
 
 function error(type) {
   notice.error(`ERROR: ${type} movie(s) was not successful`);
