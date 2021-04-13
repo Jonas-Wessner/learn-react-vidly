@@ -58,7 +58,6 @@ class MoviesPage extends Component {
   // another solution would be to lift the currentPageIndex up and only recalculate it if the movies change,
   // but it does conceptually not belong there
   getValidCurrentPageIndex = memoize((itemsCount, currentPageIndex) => {
-    console.log("currentPageIndex called");
     const { pageSize } = this.state;
 
     const pages = Math.ceil(itemsCount / pageSize);

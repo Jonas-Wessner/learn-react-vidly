@@ -42,9 +42,12 @@ class MovieForm extends Form {
       .setLabel("Rate"),
   };
 
-  componentDidMount = async () => {
-    this.setState({ genres: await getGenres() });
+  populateGenres = async () => {
+    const genres = await getGenres();
+    this.setState({ genres });
+  };
 
+  populateMovie = () => {
     const id = this.props.match.params.id;
     if (id === "new") return; // no fields to fill with initial data
 
@@ -58,8 +61,12 @@ class MovieForm extends Form {
     this.setState({ data: this.mapToViewModel(movie) });
   };
 
+  componentDidMount = async () => {
+    this.populateMovie();
+    await this.populateGenres();
+  };
+
   mapToViewModel = (dbMovie) => {
-    console.log("dbMovie: ", dbMovie);
     return {
       _id: dbMovie._id,
       title: dbMovie.title,
