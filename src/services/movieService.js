@@ -5,6 +5,10 @@ import notice from "../components/notificationService";
 
 const apiEndpoint = `${apiUrl}/movies`;
 
+function url(...rest) {
+  return rest.reduce((acc, curr) => `${acc}/${curr}`, apiEndpoint);
+}
+
 function error(type) {
   notice.error(`ERROR: ${type} movie(s) was not successful`);
   logger.log(`ERROR: ${type} movie(s) was not successful in movieService.jsx`);
@@ -34,7 +38,7 @@ export async function saveMovie(movie) {
   let promise;
   delete body._id; // backend service expects a movie without id
   if (movie._id) {
-    promise = Http.put(`${apiEndpoint}/${movie._id}`, body);
+    promise = Http.put(url(movie._id), body);
   } else {
     promise = Http.post(apiEndpoint, body);
   }
@@ -51,7 +55,7 @@ export async function saveMovie(movie) {
 }
 
 export async function deleteMovie(id) {
-  return await Http.delete(apiEndpoint + "/" + id).then(
+  return await Http.delete(url(id)).then(
     (value) => {
       success("deleting");
       return value;
