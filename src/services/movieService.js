@@ -11,7 +11,7 @@ function error(type) {
 }
 
 function success(type) {
-  notice.error(`${type} movie(s) was successful`);
+  notice.success(`${type} movie(s) was successful`);
 }
 
 export async function getMovies() {

@@ -4,7 +4,6 @@ import { getGenres } from "../services/genreService";
 import { saveMovie } from "../services/movieService";
 import Form from "./form";
 import { empty } from "../modules/utils";
-import notice from "./notificationService";
 
 class MovieForm extends Form {
   constructor() {
@@ -78,9 +77,7 @@ class MovieForm extends Form {
 
     saveMovie(movie).then((response) => {
       if (response === null) {
-        notice.error("Movie could not be saved");
       } else {
-        notice.success("Movie successfully saved");
         this.props.onSave(response.data); // raise onSave-event when movie is saved in DB
       }
     });

@@ -23,10 +23,7 @@ class Movies extends Component {
     // save changes in DB
     deleteMovie(id).then((response) => {
       if (response === null) {
-        notice.error("Movie could not be deleted");
         this.setState({ movies: prevMovies }); // revert UI if update did not succeed
-      } else {
-        notice.success("Movie successfully deleted");
       }
     });
   };
