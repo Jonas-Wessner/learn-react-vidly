@@ -49,7 +49,7 @@ code {
   cursor: pointer;
 }
 
-.movies {
+.movies-page {
   display: grid;
   justify-content: start;
   align-items: flex-start;
