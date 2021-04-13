@@ -10,9 +10,24 @@ import LoginForm from "./components/loginForm";
 import RegisterForm from "./components/registerForm";
 import { NoticeContainer } from "./components/notificationService";
 import "react-toastify/dist/ReactToastify.css";
+import Error from "./components/error";
+import logger from "./services/logger";
 
 class App extends Component {
+  state = {};
+
+  componentDidCatch(error, errorInfo) {
+    logger.log("Error:", error);
+  }
+
+  static getDerivedStateFromError(error) {
+    return { error };
+  }
+
   render = () => {
+    if (this.state.error) {
+      return <Error />;
+    }
     return (
       <React.Fragment>
         <NoticeContainer />
@@ -25,7 +40,7 @@ class App extends Component {
             <Route path="/customers" component={Customers} />
             <Route path="/rentals" component={Rentals} />
             {/* :id means that the component will get this part fo the url passed
-            in props.match.params as attribute with the name id */}
+                  in props.match.params as attribute with the name id */}
             <Route path="/not-found" component={NotFound} />
             <Redirect exact from="/" to="/movies" />
             <Redirect to="not-found" />

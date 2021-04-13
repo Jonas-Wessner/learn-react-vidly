@@ -12,8 +12,8 @@ function init() {
   });
 }
 
-function log(obj) {
-  console.error(obj);
+function log(...all) {
+  console.error(all);
 }
 
 const logger = { init, log };
